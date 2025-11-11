@@ -99,11 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString().replaceFirst('Exception: ', ''),
-          ),
-        ),
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -118,9 +114,7 @@ class _SignUpPageState extends State<SignUpPage> {
           builder: (_, c) => SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: Insets.x4),
             child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: c.maxHeight - Insets.x12,
-              ),
+              constraints: BoxConstraints(minHeight: c.maxHeight - Insets.x12),
               child: IntrinsicHeight(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -129,15 +123,12 @@ class _SignUpPageState extends State<SignUpPage> {
                     Center(
                       child: SvgPicture.asset(
                         'assets/images/logo.svg',
-                        width: 80,
-                        height: 80,
+                        width: 120,
+                        height: 120,
                       ),
                     ),
                     Gaps.v24,
-                    Text(
-                      'Your Profile',
-                      style: AppTextStyles.h1,
-                    ),
+                    Text('Your Profile', style: AppTextStyles.h1),
                     Gaps.v8,
                     Text(
                       'Please fill your profile details below',
@@ -149,7 +140,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Email
                           LabeledField(
                             label: 'Email Address',
                             child: AppTextField(
@@ -164,7 +154,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // Username
                           LabeledField(
                             label: 'Username',
                             child: AppTextField(
@@ -184,7 +173,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // Password
                           LabeledField(
                             label: 'Password',
                             child: PasswordField(
@@ -195,12 +183,10 @@ class _SignUpPageState extends State<SignUpPage> {
                           const SizedBox(height: 8),
                           Text(
                             '*Minimum 8 characters long',
-                            style:
-                                AppTextStyles.hint.copyWith(fontSize: 14),
+                            style: AppTextStyles.hint.copyWith(fontSize: 14),
                           ),
                           const SizedBox(height: 16),
 
-                          // Confirm Password
                           LabeledField(
                             label: 'Confirm Password',
                             child: PasswordField(
@@ -210,7 +196,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 16),
 
-                          // Full Name
                           LabeledField(
                             label: 'Full Name',
                             child: AppTextField(
@@ -238,7 +223,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 child: LabeledField(
                                   label: 'Education',
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedEducation,
+                                    initialValue: _selectedEducation,
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       contentPadding: EdgeInsets.symmetric(
@@ -272,8 +257,9 @@ class _SignUpPageState extends State<SignUpPage> {
                               const SizedBox(width: 16),
                               CircleAvatar(
                                 radius: 22,
-                                backgroundColor:
-                                    AppColors.text.withOpacity(0.08),
+                                backgroundColor: AppColors.text.withValues(
+                                  alpha: 0.1,
+                                ),
                                 child: const Icon(
                                   Icons.person,
                                   color: Colors.grey,
@@ -283,7 +269,6 @@ class _SignUpPageState extends State<SignUpPage> {
                           ),
                           const SizedBox(height: 24),
 
-                          // Sign Up button
                           AppButton(
                             text: 'Sign Up',
                             isBusy: _busy,
@@ -305,9 +290,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               color: Colors.black87,
                             ),
                             children: [
-                              const TextSpan(
-                                text: 'already have an account? ',
-                              ),
+                              const TextSpan(text: 'already have an account? '),
                               TextSpan(
                                 text: 'login',
                                 style: AppTextStyles.link.copyWith(
@@ -318,8 +301,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) =>
-                                            const LoginPage(),
+                                        builder: (_) => const LoginPage(),
                                       ),
                                     );
                                   },

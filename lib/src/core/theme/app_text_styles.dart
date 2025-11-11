@@ -12,6 +12,11 @@ class AppTextStyles {
     color: AppColors.text,
     letterSpacing: -0.2,
   );
+  static const h2 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: Colors.black87,
+  );
 
   static TextStyle subtitle = const TextStyle(
     fontFamily: _font,

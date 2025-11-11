@@ -11,25 +11,25 @@ import 'package:movato/src/core/widgets/app_button.dart';
 import 'package:movato/src/core/widgets/app_text_field.dart';
 import 'package:movato/src/core/widgets/labeled_field.dart';
 import 'package:movato/src/core/widgets/password_field.dart';
+import 'package:movato/src/core/widgets/form_error_text.dart';
 
 import 'package:movato/features/auth/services/auth_service.dart';
-import 'sign_up_start_page.dart'; // 🔹 halaman awal Sign Up dengan tombol Google
+import 'sign_up_start_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
-
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
   final _emailC = TextEditingController();
   final _passC = TextEditingController();
-
-  final _authService = AuthService();
+  final _auth = AuthService();
 
   bool _busy = false;
+  String? _emailError;
+  String? _passError;
 
   @override
   void dispose() {
@@ -39,27 +39,29 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _onLogin() async {
-    if (!(_formKey.currentState?.validate() ?? false)) return;
+    // validasi manual agar error bisa ditempatkan custom (rata kiri dengan tombol)
+    final emailErr = Validators.email(_emailC.text.trim());
+    final passErr = Validators.password(_passC.text);
+
+    setState(() {
+      _emailError = emailErr;
+      _passError = passErr;
+    });
+
+    if (emailErr != null || passErr != null) return;
 
     setState(() => _busy = true);
     try {
-      await _authService.login(
-        email: _emailC.text.trim(),
-        password: _passC.text.trim(),
-      );
-
+      await _auth.login(email: _emailC.text.trim(), password: _passC.text);
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login success')),
-      );
-
-      // TODO: arahkan ke dashboard/home setelah login sukses
-      // Navigator.pushReplacement(context,
-      //   MaterialPageRoute(builder: (_) => const HomePage()));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login success')));
+      // TODO: Navigator.pushReplacement(...);
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+        SnackBar(content: Text('$e'.replaceFirst('Exception: ', ''))),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -93,58 +95,74 @@ class _LoginPageState extends State<LoginPage> {
                     Text('Access your account.', style: AppTextStyles.subtitle),
                     Gaps.v24,
 
-                    // ────────────── FORM ──────────────
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LabeledField(
-                            label: 'Email',
-                            child: AppTextField(
-                              controller: _emailC,
-                              keyboardType: TextInputType.emailAddress,
-                              prefixIcon: const Icon(Icons.mail_outlined, size: 20),
-                              validator: Validators.email,
+                    // ===== FORM =====
+                    LabeledField(
+                      label: 'Email',
+                      child: AppTextField(
+                        controller: _emailC,
+                        keyboardType: TextInputType.emailAddress,
+                        prefixIcon: const Icon(Icons.mail_outlined, size: 20),
+                        hintText: 'Enter your email address',
+                        onChanged: (_) {
+                          setState(
+                            () => _emailError = Validators.email(
+                              _emailC.text.trim(),
                             ),
-                          ),
-                          const SizedBox(height: 16),
-                          LabeledField(
-                            label: 'Password',
-                            child: PasswordField(
-                              controller: _passC,
-                              validator: Validators.password,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '*Minimum 8 characters long',
-                            style: AppTextStyles.hint.copyWith(fontSize: 14),
-                          ),
-                          const SizedBox(height: 24),
-                          AppButton(
-                            text: 'Log In',
-                            isBusy: _busy,
-                            onPressed: _onLogin,
-                          ),
-                        ],
+                          );
+                        },
                       ),
+                    ),
+                    if (_emailError != null) const SizedBox(height: 6),
+                    if (_emailError != null) FormErrorText(_emailError!),
+
+                    const SizedBox(height: 16),
+
+                    LabeledField(
+                      label: 'Password',
+                      child: PasswordField(
+                        controller: _passC,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(Icons.lock_outline, size: 20),
+                          hintText: 'Enter your password',
+                        ),
+                        onFieldSubmitted: (_) => _onLogin(),
+                      ),
+                    ),
+                    if (_passError != null) const SizedBox(height: 6),
+                    if (_passError != null) FormErrorText(_passError!),
+
+                    const SizedBox(height: 8),
+                    Text(
+                      '*Minimum 8 characters long',
+                      style: AppTextStyles.hint.copyWith(fontSize: 14),
+                    ),
+
+                    const SizedBox(height: 24),
+                    AppButton(
+                      text: 'Log In',
+                      isBusy: _busy,
+                      onPressed: _onLogin,
                     ),
 
                     const Spacer(),
 
-                    // ────────────── FOOTER LINK ──────────────
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: Insets.x10),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Insets.x10,
+                        ),
                         child: RichText(
                           text: TextSpan(
-                            style: AppTextStyles.subtitle.copyWith(color: Colors.black87),
+                            style: AppTextStyles.subtitle.copyWith(
+                              color: Colors.black87,
+                            ),
                             children: [
                               const TextSpan(text: "Don't have an account? "),
                               TextSpan(
                                 text: 'Sign Up',
-                                style: AppTextStyles.link.copyWith(color: AppColors.text),
+                                style: AppTextStyles.link.copyWith(
+                                  color: AppColors.text,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.push(

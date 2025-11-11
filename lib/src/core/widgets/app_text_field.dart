@@ -4,18 +4,22 @@ import '../theme/app_text_styles.dart';
 class AppTextField extends StatelessWidget {
   const AppTextField({
     super.key,
-    this.hintText,
-    this.prefixIcon,
-    this.keyboardType,
     this.controller,
+    this.keyboardType,
     this.validator,
+    this.prefixIcon,
+    this.hintText,
+    this.onChanged,
+    this.onFieldSubmitted,
   });
 
-  final String? hintText;
-  final Widget? prefixIcon;
-  final TextInputType? keyboardType;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final Widget? prefixIcon;
+  final String? hintText;
+  final void Function(String)? onChanged;
+  final void Function(String)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +27,13 @@ class AppTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
+      onChanged: onChanged,
+      onFieldSubmitted: onFieldSubmitted,
       style: AppTextStyles.field,
-      decoration: InputDecoration(hintText: hintText, prefixIcon: prefixIcon),
+      decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+        hintText: hintText,
+      ),
     );
   }
 }

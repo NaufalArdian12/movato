@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:movato/features/auth/presentation/pages/login_page.dart';
+import 'package:movato/src/core/widgets/app_button.dart';
 
 import 'verify_email_page.dart';
-import 'sign_up_page.dart';
 
 import 'package:movato/src/core/constants/gaps.dart';
 import 'package:movato/src/core/constants/insets.dart';
 import 'package:movato/src/core/theme/app_text_styles.dart';
 import 'package:movato/src/core/theme/app_colors.dart';
 import 'package:movato/src/core/utils/validators.dart';
+import 'package:movato/src/core/widgets/labeled_field.dart';
+import 'package:movato/src/core/widgets/app_text_field.dart';
 
 class SignUpStartPage extends StatefulWidget {
   const SignUpStartPage({super.key});
@@ -67,100 +70,64 @@ class _SignUpStartPageState extends State<SignUpStartPage> {
               Text('Join us and get started', style: AppTextStyles.subtitle),
               Gaps.v32,
 
-              // Email input
               Form(
                 key: _formKey,
-                child: TextFormField(
-                  controller: _emailC,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
+                child: LabeledField(
+                  label: 'Email',
+                  child: AppTextField(
+                    controller: _emailC,
+                    keyboardType: TextInputType.emailAddress,
                     hintText: 'Enter your email address',
-                    prefixIcon: Icon(Icons.mail_outline),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(24)),
-                    ),
+                    prefixIcon: const Icon(Icons.mail_outline, size: 20),
+                    validator: Validators.email,
                   ),
-                  validator: Validators.email,
                 ),
               ),
+
               Gaps.v16,
 
-              // Continue button
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _busy ? null : _onContinue,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black87,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                  ),
-                  child: _busy
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text(
-                          'Continue',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                          ),
-                        ),
-                ),
-              ),
+              AppButton(text: 'Continue', onPressed: _onContinue),
 
               const Spacer(),
 
-              // Tombol Sign Up bawah → buka form profile
-            Center(
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const SignUpPage(),
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(bottom: Insets.x8),
-                  child: Text.rich(
-                    TextSpan(
-                      style: AppTextStyles.subtitle.copyWith(
-                        color: Colors.black87,
-                      ),
-                      children: [
-                        const TextSpan(
-                          text: "Don't have an account? ",
-                        ),
+              Center(
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const LoginPage()),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: Insets.x8),
+                      child: Text.rich(
                         TextSpan(
-                          text: 'Sign Up',
-                          style: AppTextStyles.link.copyWith(
-                            color: AppColors.text,
-                            decoration: TextDecoration.none,
+                          style: AppTextStyles.subtitle.copyWith(
+                            color: Colors.black87,
                           ),
+                          children: [
+                            const TextSpan(text: "Already have an account? "),
+                            TextSpan(
+                              text: 'Sign In',
+                              style: AppTextStyles.link.copyWith(
+                                color: AppColors.text,
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
-    ),
-  ),
-);
+    );
   }
 }

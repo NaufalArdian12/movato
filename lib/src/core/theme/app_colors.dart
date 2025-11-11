@@ -6,5 +6,5 @@ class AppColors {
   static const textSecondary = Color(0xFF8A8A99);
   static const background = Color(0xFFFFFFFF);
 
-  static const border = Color(0xFFE4E4E7); // ← sesuai spek
+  static const border = Color(0xFFE4E4E7);
 }

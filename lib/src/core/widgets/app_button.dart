@@ -21,7 +21,7 @@ class AppButton extends StatelessWidget {
       child: FilledButton(
         onPressed: isBusy ? null : onPressed,
         style: FilledButton.styleFrom(
-          padding: const EdgeInsets.symmetric(vertical: Insets.x4),
+          padding: const EdgeInsets.symmetric(vertical: Insets.x6),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

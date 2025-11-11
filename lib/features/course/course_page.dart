@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'course_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CoursePage extends StatelessWidget {
@@ -63,9 +64,7 @@ class CoursePage extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
-                children: courses
-                    .map((c) => _CourseCard(data: c))
-                    .toList(),
+                children: courses.map((c) => _CourseCard(data: c)).toList(),
               ),
             ),
             const SizedBox(height: 24),
@@ -163,9 +162,7 @@ class _CourseCard extends StatelessWidget {
                     value: data.progress,
                     minHeight: 6,
                     backgroundColor: const Color(0xFFEDE9FF),
-                    valueColor: const AlwaysStoppedAnimation(
-                      Color(0xFF7B61FF),
-                    ),
+                    valueColor: const AlwaysStoppedAnimation(Color(0xFF7B61FF)),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -173,14 +170,23 @@ class _CourseCard extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // TODO: ke detail course
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CourseDetailPage(
+                            title: data.title,
+                            subtitle: data.desc,
+                            image: data.image,
+                          ),
+                        ),
+                      );
                     },
                     child: Text(
-                      'Learn More',
+                      'MEMEK',
                       style: GoogleFonts.poppins(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: const Color(0xFF7B61FF),
+                        color: const Color.fromARGB(255, 112, 83, 255),
                       ),
                     ),
                   ),

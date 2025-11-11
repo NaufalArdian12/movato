@@ -13,7 +13,8 @@ import 'package:movato/src/core/widgets/labeled_field.dart';
 import 'package:movato/src/core/widgets/password_field.dart';
 
 import 'package:movato/features/auth/services/auth_service.dart';
-import 'sign_up_start_page.dart'; // 🔹 halaman awal Sign Up dengan tombol Google
+import 'sign_up_start_page.dart';
+import '../../../dashboard/dashboard_page.dart'; // 🔹 tambahkan import ini
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -49,13 +50,15 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login success')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Login success')));
 
-      // TODO: arahkan ke dashboard/home setelah login sukses
-      // Navigator.pushReplacement(context,
-      //   MaterialPageRoute(builder: (_) => const HomePage()));
+      // ✅ Arahkan ke Dashboard setelah login sukses
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const DashboardPage()),
+      );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -104,7 +107,10 @@ class _LoginPageState extends State<LoginPage> {
                             child: AppTextField(
                               controller: _emailC,
                               keyboardType: TextInputType.emailAddress,
-                              prefixIcon: const Icon(Icons.mail_outlined, size: 20),
+                              prefixIcon: const Icon(
+                                Icons.mail_outlined,
+                                size: 20,
+                              ),
                               validator: Validators.email,
                             ),
                           ),
@@ -136,15 +142,21 @@ class _LoginPageState extends State<LoginPage> {
                     // ────────────── FOOTER LINK ──────────────
                     Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: Insets.x10),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Insets.x10,
+                        ),
                         child: RichText(
                           text: TextSpan(
-                            style: AppTextStyles.subtitle.copyWith(color: Colors.black87),
+                            style: AppTextStyles.subtitle.copyWith(
+                              color: Colors.black87,
+                            ),
                             children: [
                               const TextSpan(text: "Don't have an account? "),
                               TextSpan(
                                 text: 'Sign Up',
-                                style: AppTextStyles.link.copyWith(color: AppColors.text),
+                                style: AppTextStyles.link.copyWith(
+                                  color: AppColors.text,
+                                ),
                                 recognizer: TapGestureRecognizer()
                                   ..onTap = () {
                                     Navigator.push(

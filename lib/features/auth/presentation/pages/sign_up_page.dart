@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -73,7 +72,6 @@ class _SignUpPageState extends State<SignUpPage> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     setState(() => _busy = true);
-
     try {
       await _authService.signUp(
         email: _emailC.text.trim(),
@@ -85,21 +83,27 @@ class _SignUpPageState extends State<SignUpPage> {
 
       if (!mounted) return;
 
+      // Kasih info sukses
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Sign up success. Please verify your email.'),
+          content: Text('Sign up success! Please log in.'),
         ),
       );
 
-      // TODO: kalau mau, arahkan ke halaman "Verify your email"
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const VerifyEmailPage()),
-      // );
+      // Navigasi kembali ke halaman Login, bersihin stack
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginPage()),
+        (route) => false,
+      );
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+        SnackBar(
+          content: Text(
+            e.toString().replaceFirst('Exception: ', ''),
+          ),
+        ),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -114,7 +118,8 @@ class _SignUpPageState extends State<SignUpPage> {
           builder: (_, c) => SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: Insets.x4),
             child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: c.maxHeight - Insets.x12),
+              constraints:
+                  BoxConstraints(minHeight: c.maxHeight - Insets.x12),
               child: IntrinsicHeight(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,8 +128,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     Center(
                       child: SvgPicture.asset(
                         'assets/images/logo.svg',
-                        width: 120,
-                        height: 120,
+                        width: 80,
+                        height: 80,
                       ),
                     ),
                     Gaps.v24,
@@ -153,7 +158,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-
                           LabeledField(
                             label: 'Username',
                             child: AppTextField(
@@ -163,16 +167,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 Icons.person_outline,
                                 size: 20,
                               ),
-                              validator: (v) {
-                                if (v == null || v.trim().isEmpty) {
-                                  return 'Username is required';
-                                }
-                                return null;
-                              },
+                              validator: (v) =>
+                                  v == null || v.trim().isEmpty
+                                      ? 'Username is required'
+                                      : null,
                             ),
                           ),
                           const SizedBox(height: 16),
-
                           LabeledField(
                             label: 'Password',
                             child: PasswordField(
@@ -186,7 +187,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             style: AppTextStyles.hint.copyWith(fontSize: 14),
                           ),
                           const SizedBox(height: 16),
-
                           LabeledField(
                             label: 'Confirm Password',
                             child: PasswordField(
@@ -195,7 +195,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             ),
                           ),
                           const SizedBox(height: 16),
-
                           LabeledField(
                             label: 'Full Name',
                             child: AppTextField(
@@ -205,17 +204,13 @@ class _SignUpPageState extends State<SignUpPage> {
                                 Icons.badge_outlined,
                                 size: 20,
                               ),
-                              validator: (v) {
-                                if (v == null || v.trim().isEmpty) {
-                                  return 'Full name is required';
-                                }
-                                return null;
-                              },
+                              validator: (v) =>
+                                  v == null || v.trim().isEmpty
+                                      ? 'Full name is required'
+                                      : null,
                             ),
                           ),
                           const SizedBox(height: 16),
-
-                          // Education + avatar kecil
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -223,7 +218,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 child: LabeledField(
                                   label: 'Education',
                                   child: DropdownButtonFormField<String>(
-                                    initialValue: _selectedEducation,
+                                    value: _selectedEducation,
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       contentPadding: EdgeInsets.symmetric(
@@ -245,21 +240,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                         _selectedEducation = val;
                                       });
                                     },
-                                    validator: (v) {
-                                      if (v == null || v.isEmpty) {
-                                        return 'Please select education level';
-                                      }
-                                      return null;
-                                    },
+                                    validator: (v) =>
+                                        v == null || v.isEmpty
+                                            ? 'Please select education level'
+                                            : null,
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               CircleAvatar(
                                 radius: 22,
-                                backgroundColor: AppColors.text.withValues(
-                                  alpha: 0.1,
-                                ),
+                                backgroundColor:
+                                    AppColors.text.withOpacity(0.08),
                                 child: const Icon(
                                   Icons.person,
                                   color: Colors.grey,
@@ -268,7 +260,6 @@ class _SignUpPageState extends State<SignUpPage> {
                             ],
                           ),
                           const SizedBox(height: 24),
-
                           AppButton(
                             text: 'Sign Up',
                             isBusy: _busy,
@@ -277,40 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ],
                       ),
                     ),
-
                     const Spacer(),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: Insets.x10,
-                        ),
-                        child: RichText(
-                          text: TextSpan(
-                            style: AppTextStyles.subtitle.copyWith(
-                              color: Colors.black87,
-                            ),
-                            children: [
-                              const TextSpan(text: 'already have an account? '),
-                              TextSpan(
-                                text: 'login',
-                                style: AppTextStyles.link.copyWith(
-                                  color: AppColors.text,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => const LoginPage(),
-                                      ),
-                                    );
-                                  },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

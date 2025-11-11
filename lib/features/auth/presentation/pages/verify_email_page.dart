@@ -1,56 +1,69 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:movato/src/core/constants/gaps.dart';
 import 'package:movato/src/core/constants/insets.dart';
 import 'package:movato/src/core/theme/app_colors.dart';
 import 'package:movato/src/core/theme/app_text_styles.dart';
 import 'package:movato/src/core/widgets/app_button.dart';
 
+import 'sign_up_page.dart';
+
 class VerifyEmailPage extends StatelessWidget {
   final String email;
   const VerifyEmailPage({super.key, required this.email});
 
-  void _showVerificationSentDialog(BuildContext context) {
+  void _showVerificationSentDialog(BuildContext rootContext) {
     showDialog(
-      context: context,
+      context: rootContext,
       barrierDismissible: true,
-      builder: (_) => Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(
-                Icons.check_circle,
-                size: 56,
-                color: AppColors.text,
-              ),
-              Gaps.v16,
-              Text(
-                'Verification already send!',
-                style: AppTextStyles.h1.copyWith(fontSize: 20),
-                textAlign: TextAlign.center,
-              ),
-              Gaps.v8,
-              const Text(
-                'check your email and spam folder!',
-                textAlign: TextAlign.center,
-              ),
-              Gaps.v24,
-              AppButton(
-                text: 'Redirect to Gmail',
-                onPressed: () {
-                  // TODO: url_launcher ke Gmail kalau mau
-                  Navigator.pop(context);
-                },
-              ),
-            ],
+      builder: (dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
           ),
-        ),
-      ),
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(
+                  Icons.check_circle,
+                  size: 56,
+                  color: AppColors.text,
+                ),
+                Gaps.v16,
+                Text(
+                  'Verification already sent!',
+                  style: AppTextStyles.h1.copyWith(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+                Gaps.v8,
+                const Text(
+                  'check your email and spam folder!',
+                  textAlign: TextAlign.center,
+                ),
+                Gaps.v24,
+                AppButton(
+                  text: 'Redirect to Gmail',
+                  onPressed: () {
+                    // 1. Tutup dialog pakai context dialog
+                    Navigator.of(dialogContext).pop();
+
+                    // 2. Ganti halaman ke form profil pakai context root
+                    Navigator.pushReplacement(
+                      rootContext,
+                      MaterialPageRoute(
+                        builder: (_) => const SignUpPage(),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

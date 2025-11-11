@@ -23,7 +23,6 @@ class SignUpStartPage extends StatefulWidget {
 class _SignUpStartPageState extends State<SignUpStartPage> {
   final _emailC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _busy = false;
 
   @override
   void dispose() {
@@ -34,10 +33,8 @@ class _SignUpStartPageState extends State<SignUpStartPage> {
   Future<void> _onContinue() async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
-    setState(() => _busy = true);
     await Future.delayed(const Duration(milliseconds: 500));
     if (!mounted) return;
-    setState(() => _busy = false);
 
     Navigator.push(
       context,

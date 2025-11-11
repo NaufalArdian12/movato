@@ -57,15 +57,6 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Login success')));
-
-      // ✅ Arahkan ke Dashboard setelah login sukses
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const DashboardPage()),
-      );
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Login success')));
       // TODO: Navigator.pushReplacement(...);
     } catch (e) {
       if (!mounted) return;
@@ -104,22 +95,6 @@ class _LoginPageState extends State<LoginPage> {
                     Text('Access your account.', style: AppTextStyles.subtitle),
                     Gaps.v24,
 
-                    // ────────────── FORM ──────────────
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          LabeledField(
-                            label: 'Email',
-                            child: AppTextField(
-                              controller: _emailC,
-                              keyboardType: TextInputType.emailAddress,
-                              prefixIcon: const Icon(
-                                Icons.mail_outlined,
-                                size: 20,
-                              ),
-                              validator: Validators.email,
                     // ===== FORM =====
                     LabeledField(
                       label: 'Email',

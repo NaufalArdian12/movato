@@ -16,10 +16,10 @@ class CourseDetailPage extends StatelessWidget {
     required this.image,
   });
 
-  // ---- LESSONS per course ----
+  // ---------------- LESSONS ----------------
   List<String> _lessonsFor(String key) {
     switch (key) {
-      case 'fraction':
+      case 'fraction': // mengenal bilangan pecahan
         return const [
           'Apa Itu Pecahan?',
           'Menghitung Besaran Pecahan Dalam Diagram',
@@ -45,10 +45,10 @@ class CourseDetailPage extends StatelessWidget {
     }
   }
 
-  // ---- QUIZ per course (pakai soal dari kamu) ----
+  // ---------------- QUIZ (pakai soal kamu) ----------------
   List<String> _quizFor(String key) {
     switch (key) {
-      case 'shapes': // Pengenalan Bangun Ruang
+      case 'shapes':
         return const [
           'Sebutkan tiga contoh benda di sekitar kita yang berbentuk kubus!',
           'Sebuah balok memiliki berapa sisi, rusuk, dan titik sudut?',
@@ -56,8 +56,7 @@ class CourseDetailPage extends StatelessWidget {
           'Perhatikan benda berikut: bola, dadu, kaleng, dan lemari. Benda yang tidak memiliki rusuk adalah …',
           'Bangun ruang yang memiliki dua tutup berbentuk lingkaran dan satu selimut adalah …',
         ];
-
-      case 'multiplication': // Pengenalan Perkalian
+      case 'multiplication':
         return const [
           'Ada 3 piring. Setiap piring berisi 4 kue. Berapa jumlah seluruh kue?',
           '5 × 2 artinya …',
@@ -65,8 +64,7 @@ class CourseDetailPage extends StatelessWidget {
           'Hasil dari 6 × 6 adalah …',
           'Hasil dari 8 × 9 adalah …',
         ];
-
-      case 'fraction': // Mengenal Bilangan Pecahan
+      case 'fraction':
         return const [
           'Pecahan 3/4 setara dengan berapa persen?',
           'Sederhanakan pecahan 8/12.',
@@ -74,7 +72,6 @@ class CourseDetailPage extends StatelessWidget {
           'Ubah 1 1/2 menjadi pecahan biasa.',
           'Hasil dari 2/5 + 1/5 adalah …',
         ];
-
       default:
         return const [];
     }
@@ -90,7 +87,7 @@ class CourseDetailPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // HEADER: gambar + back
+            // ---------------- HEADER ----------------
             SizedBox(
               height: 260,
               child: Stack(
@@ -104,18 +101,20 @@ class CourseDetailPage extends StatelessWidget {
                       child: Image.asset(
                         image,
                         fit: BoxFit.cover,
+                        // fallback bila asset belum ada
                         errorBuilder: (_, __, ___) => Container(
                           color: const Color(0xFFEDE9FF),
                           alignment: Alignment.center,
                           child: Icon(
                             Icons.menu_book_rounded,
-                            size: 60,
+                            size: 64,
                             color: Colors.deepPurple.shade300,
                           ),
                         ),
                       ),
                     ),
                   ),
+                  // tombol back
                   Positioned(
                     top: 16,
                     left: 16,
@@ -125,12 +124,16 @@ class CourseDetailPage extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.9),
                           shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.06),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
                         ),
                         padding: const EdgeInsets.all(8),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
-                        ),
+                        child: const Icon(Icons.arrow_back, color: Colors.black),
                       ),
                     ),
                   ),
@@ -138,21 +141,17 @@ class CourseDetailPage extends StatelessWidget {
               ),
             ),
 
-            // BODY
+            // ---------------- BODY ----------------
             Expanded(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       title,
                       style: GoogleFonts.poppins(
-                        fontSize: 18,
+                        fontSize: 20,
                         fontWeight: FontWeight.w600,
                         color: Colors.black87,
                       ),
@@ -167,20 +166,16 @@ class CourseDetailPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    // tag & durasi
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF2ECFF),
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
+                    // tag preview + durasi
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF2ECFF),
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Text(
                             'Course Preview',
                             style: GoogleFonts.poppins(
                               fontSize: 13,
@@ -188,44 +183,46 @@ class CourseDetailPage extends StatelessWidget {
                               color: const Color(0xFF7B61FF),
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          const Icon(
-                            Icons.schedule,
-                            size: 16,
-                            color: Color(0xFF9E9E9E),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '2hr 15min',
-                            style: GoogleFonts.poppins(
-                              fontSize: 12,
-                              color: Color(0xFF9E9E9E),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                        const SizedBox(width: 12),
+                        const Icon(Icons.schedule, size: 16, color: Color(0xFF9E9E9E)),
+                        const SizedBox(width: 4),
+                        Text(
+                          '2hr 15min',
+                          style: GoogleFonts.poppins(fontSize: 12, color: const Color(0xFF9E9E9E)),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
 
-                    // LIST LESSON + QUIZ
+                    // list lessons + quiz
                     Expanded(
                       child: ListView(
                         padding: EdgeInsets.zero,
                         children: [
-                          ...lessons.map(
-                            (t) => _LessonItem(title: t, isQuiz: false),
+                          ...lessons.asMap().entries.map(
+                            (e) => _LessonItem(
+                              index: e.key + 1,
+                              title: e.value,
+                              subtitle: 'Lorem ipsum dolor sit amet',
+                              isQuiz: false,
+                              onTap: () {
+                                // TODO: buka materi (video/teks)
+                              },
+                            ),
                           ),
                           if (quiz.isNotEmpty)
                             _LessonItem(
-                              title: 'Quiz',
                               isQuiz: true,
+                              title: 'Quiz Dasar',
+                              subtitle: 'Uji pemahamanmu dari materi ini',
                               onTap: () {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => QuizPage(
-                                      title: 'Quiz - $title',
-                                      questions: quiz,
+                                      title: 'Quiz – $title',
+                                      questions: quiz, // <- list soal aman (tidak null)
                                     ),
                                   ),
                                 );
@@ -235,7 +232,7 @@ class CourseDetailPage extends StatelessWidget {
                       ),
                     ),
 
-                    // BUTTON GET STARTED
+                    // primary action
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
@@ -272,54 +269,118 @@ class CourseDetailPage extends StatelessWidget {
 }
 
 class _LessonItem extends StatelessWidget {
+  final int? index;               // untuk lesson (1,2,3,…)
   final String title;
+  final String? subtitle;         // deskripsi kecil
   final bool isQuiz;
   final VoidCallback? onTap;
 
-  const _LessonItem({required this.title, required this.isQuiz, this.onTap});
+  const _LessonItem({
+    this.index,
+    required this.title,
+    this.subtitle,
+    required this.isQuiz,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = isQuiz ? const Color(0xFF7B61FF) : const Color(0xFFF2ECFF);
-    final textColor = isQuiz ? Colors.white : const Color(0xFF3C3C3C);
-    final iconBgColor = isQuiz
-        ? Colors.white
-        : const Color(0xFF7B61FF).withOpacity(0.15);
-    final iconColor = isQuiz
-        ? const Color(0xFF7B61FF)
-        : const Color(0xFF7B61FF);
-    final iconData = isQuiz ? Icons.help_outline : Icons.play_arrow_rounded;
+    final bg = isQuiz ? const Color(0xFF7B61FF) : Colors.white;
+    final fg = isQuiz ? Colors.white : const Color(0xFF3C3C3C);
+    final sub = isQuiz ? Colors.white70 : Colors.grey[600];
 
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: onTap,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
+        margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: bgColor,
+          color: bg,
           borderRadius: BorderRadius.circular(18),
+          boxShadow: isQuiz
+              ? [
+                  BoxShadow(
+                    color: const Color(0xFF7B61FF).withOpacity(0.28),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
+                  ),
+                ]
+              : [
+                  BoxShadow(
+                    color: Colors.black12.withOpacity(0.05),
+                    blurRadius: 6,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            // chip index (untuk lesson) / ikon (untuk quiz)
+            Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: isQuiz ? Colors.white : const Color(0xFF7B61FF).withOpacity(0.12),
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: isQuiz
+                  ? const Icon(Icons.help_outline, color: Color(0xFF7B61FF))
+                  : Text(
+                      '${index ?? ''}',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w700,
+                        color: const Color(0xFF7B61FF),
+                      ),
+                    ),
+            ),
+            const SizedBox(width: 12),
+            // texts
             Expanded(
-              child: Text(
-                title,
-                style: GoogleFonts.poppins(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: fg,
+                    ),
+                  ),
+                  if (subtitle != null) ...[
+                    const SizedBox(height: 2),
+                    Text(
+                      subtitle!,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        fontSize: 12,
+                        color: sub,
+                      ),
+                    ),
+                  ],
+                ],
               ),
             ),
+            const SizedBox(width: 12),
+            // trailing
             Container(
               decoration: BoxDecoration(
-                color: iconBgColor,
+                color: isQuiz
+                    ? Colors.white.withOpacity(0.15)
+                    : const Color(0xFF7B61FF).withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
               padding: const EdgeInsets.all(8),
-              child: Icon(iconData, color: iconColor, size: 22),
+              child: Icon(
+                isQuiz ? Icons.quiz_outlined : Icons.play_arrow_rounded,
+                size: 22,
+                color: isQuiz ? Colors.white : const Color(0xFF7B61FF),
+              ),
             ),
           ],
         ),

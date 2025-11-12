@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'course_detail_page.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'course_detail_page.dart';
 
 class CoursePage extends StatelessWidget {
   const CoursePage({super.key});
@@ -13,18 +13,21 @@ class CoursePage extends StatelessWidget {
         desc: 'Belajar konsep pecahan dengan cara yang menyenangkan.',
         progress: 0.76,
         image: 'assets/images/course_fraction.png',
+        courseKey: 'fraction',
       ),
       _CourseData(
         title: 'Pengenalan Bangun Ruang',
         desc: 'Kenali bentuk 3D di sekitar kita.',
         progress: 0.32,
         image: 'assets/images/course_shape.png',
+        courseKey: 'shapes',
       ),
       _CourseData(
         title: 'Pengenalan Perkalian',
         desc: 'Dasar perkalian untuk pemula.',
         progress: 0.10,
         image: 'assets/images/course_math.png',
+        courseKey: 'multiplication',
       ),
     ];
 
@@ -34,6 +37,7 @@ class CoursePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Header
             Container(
               width: double.infinity,
               padding: const EdgeInsets.fromLTRB(16, 48, 16, 24),
@@ -60,7 +64,10 @@ class CoursePage extends StatelessWidget {
                 ),
               ),
             ),
+
             const SizedBox(height: 16),
+
+            // List cards
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -80,12 +87,14 @@ class _CourseData {
   final String desc;
   final double progress;
   final String image;
+  final String courseKey; // 'fraction' | 'shapes' | 'multiplication'
 
   const _CourseData({
     required this.title,
     required this.desc,
     required this.progress,
     required this.image,
+    required this.courseKey,
   });
 }
 
@@ -112,6 +121,7 @@ class _CourseCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Image
           ClipRRect(
             borderRadius: const BorderRadius.only(
               topLeft: Radius.circular(24),
@@ -125,6 +135,8 @@ class _CourseCard extends StatelessWidget {
               errorBuilder: (_, __, ___) => _fallbackImage(),
             ),
           ),
+
+          // Info
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 12, 16, 14),
             child: Column(
@@ -162,10 +174,13 @@ class _CourseCard extends StatelessWidget {
                     value: data.progress,
                     minHeight: 6,
                     backgroundColor: const Color(0xFFEDE9FF),
-                    valueColor: const AlwaysStoppedAnimation(Color(0xFF7B61FF)),
+                    valueColor:
+                        const AlwaysStoppedAnimation(Color(0xFF7B61FF)),
                   ),
                 ),
                 const SizedBox(height: 8),
+
+                // Learn More
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -174,6 +189,7 @@ class _CourseCard extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (_) => CourseDetailPage(
+                            courseKey: data.courseKey,
                             title: data.title,
                             subtitle: data.desc,
                             image: data.image,
@@ -182,11 +198,11 @@ class _CourseCard extends StatelessWidget {
                       );
                     },
                     child: Text(
-                      'MEMEK',
+                      'Learn More',
                       style: GoogleFonts.poppins(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: const Color.fromARGB(255, 112, 83, 255),
+                        color: const Color(0xFF7053FF),
                       ),
                     ),
                   ),

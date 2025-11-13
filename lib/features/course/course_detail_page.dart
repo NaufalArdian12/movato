@@ -32,7 +32,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           {
             'title': 'Apa Itu Pecahan?',
             'video':
-                'https://www.youtube.com/watch?v=0hPRfqPFtt8&t', // contoh YouTube
+                'https://youtu.be/rZPrb1dmpXw?si=Xsmbxoqm9UY3nICB', // contoh YouTube
           },
           {
             'title': 'Menghitung Besaran Pecahan Dalam Diagram',

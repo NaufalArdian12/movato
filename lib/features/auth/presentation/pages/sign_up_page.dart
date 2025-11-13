@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:movato/features/auth/presentation/pages/login_page.dart';
 import 'package:movato/src/core/constants/gaps.dart';
 import 'package:movato/src/core/constants/insets.dart';
 import 'package:movato/src/core/theme/app_colors.dart';
@@ -10,9 +10,7 @@ import 'package:movato/src/core/widgets/app_button.dart';
 import 'package:movato/src/core/widgets/app_text_field.dart';
 import 'package:movato/src/core/widgets/labeled_field.dart';
 import 'package:movato/src/core/widgets/password_field.dart';
-
 import 'package:movato/features/auth/services/auth_service.dart';
-import 'login_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -73,21 +71,17 @@ class _SignUpPageState extends State<SignUpPage> {
 
     setState(() => _busy = true);
     try {
-      await _authService.signUp(
+      await _authService.signup(
         email: _emailC.text.trim(),
         username: _usernameC.text.trim(),
         password: _passwordC.text.trim(),
-        fullName: _fullNameC.text.trim(),
-        education: _selectedEducation,
       );
 
       if (!mounted) return;
 
       // Kasih info sukses
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Sign up success! Please log in.'),
-        ),
+        const SnackBar(content: Text('Sign up success! Please log in.')),
       );
 
       // Navigasi kembali ke halaman Login, bersihin stack
@@ -99,11 +93,7 @@ class _SignUpPageState extends State<SignUpPage> {
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString().replaceFirst('Exception: ', ''),
-          ),
-        ),
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
       );
     } finally {
       if (mounted) setState(() => _busy = false);
@@ -118,8 +108,7 @@ class _SignUpPageState extends State<SignUpPage> {
           builder: (_, c) => SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: Insets.x4),
             child: ConstrainedBox(
-              constraints:
-                  BoxConstraints(minHeight: c.maxHeight - Insets.x12),
+              constraints: BoxConstraints(minHeight: c.maxHeight - Insets.x12),
               child: IntrinsicHeight(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,10 +156,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 Icons.person_outline,
                                 size: 20,
                               ),
-                              validator: (v) =>
-                                  v == null || v.trim().isEmpty
-                                      ? 'Username is required'
-                                      : null,
+                              validator: (v) => v == null || v.trim().isEmpty
+                                  ? 'Username is required'
+                                  : null,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -204,10 +192,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                 Icons.badge_outlined,
                                 size: 20,
                               ),
-                              validator: (v) =>
-                                  v == null || v.trim().isEmpty
-                                      ? 'Full name is required'
-                                      : null,
+                              validator: (v) => v == null || v.trim().isEmpty
+                                  ? 'Full name is required'
+                                  : null,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -240,18 +227,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                         _selectedEducation = val;
                                       });
                                     },
-                                    validator: (v) =>
-                                        v == null || v.isEmpty
-                                            ? 'Please select education level'
-                                            : null,
+                                    validator: (v) => v == null || v.isEmpty
+                                        ? 'Please select education level'
+                                        : null,
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               CircleAvatar(
                                 radius: 22,
-                                backgroundColor:
-                                    AppColors.text.withOpacity(0.08),
+                                backgroundColor: AppColors.text.withOpacity(
+                                  0.08,
+                                ),
                                 child: const Icon(
                                   Icons.person,
                                   color: Colors.grey,

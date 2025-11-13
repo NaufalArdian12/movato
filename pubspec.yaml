@@ -12,6 +12,9 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  youtube_player_flutter: ^8.1.2
+
+
   flutter_svg: ^2.0.9
   google_sign_in: ^6.1.5
   dio: ^5.9.0

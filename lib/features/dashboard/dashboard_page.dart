@@ -259,9 +259,7 @@ class _DashboardPageState extends State<DashboardPage> {
         // Klik card → buka halaman Courses
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (_) => const CoursePage(),
-          ),
+          MaterialPageRoute(builder: (_) => const CoursePage()),
         );
       },
       child: Container(
@@ -343,10 +341,7 @@ class _DashboardPageState extends State<DashboardPage> {
       unselectedItemColor: Colors.grey,
       showUnselectedLabels: true,
       items: const [
-        BottomNavigationBarItem(
-          icon: Icon(Icons.home_outlined),
-          label: 'Home',
-        ),
+        BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
         BottomNavigationBarItem(
           icon: Icon(Icons.book_outlined),
           label: 'Courses',

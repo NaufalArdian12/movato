@@ -205,7 +205,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 child: LabeledField(
                                   label: 'Education',
                                   child: DropdownButtonFormField<String>(
-                                    value: _selectedEducation,
+                                    initialValue: _selectedEducation,
                                     decoration: const InputDecoration(
                                       border: InputBorder.none,
                                       contentPadding: EdgeInsets.symmetric(

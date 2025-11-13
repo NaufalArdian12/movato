@@ -8,12 +8,14 @@ class PasswordField extends StatefulWidget {
     this.validator,
     this.decoration,
     this.onFieldSubmitted,
+    this.onChanged,
   });
 
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final InputDecoration? decoration;
   final void Function(String)? onFieldSubmitted;
+  final void Function(String)? onChanged;
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();

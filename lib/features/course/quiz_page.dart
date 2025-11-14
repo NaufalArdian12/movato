@@ -2,32 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class QuizPage extends StatefulWidget {
-  /// Contoh: "Quiz – Mengenal Bilangan Pecahan"
   final String title;
 
-  /// Daftar pertanyaan (wajib, boleh kosong tapi aman).
   final List<String> questions;
 
-  const QuizPage({
-    super.key,
-    required this.title,
-    required this.questions,
-  });
+  const QuizPage({super.key, required this.title, required this.questions});
 
   @override
   State<QuizPage> createState() => _QuizPageState();
 }
 
 class _QuizPageState extends State<QuizPage> {
-  // --------- THEME ---------
   static const Color kPurple = Color(0xFF4C39C7);
   static const Color kPurpleSoft = Color(0xFF7B61FF);
   static const Color kChipBg = Color(0xFFEBE9F6);
   static const Color kScaffold = Color(0xFFF6F7FB);
 
   final TextEditingController _answerCtrl = TextEditingController();
-  late final List<String> _answers; // menyimpan jawaban per nomor
-  int _idx = 0; // index soal aktif
+  late final List<String> _answers;
+  int _idx = 0;
 
   @override
   void initState() {
@@ -46,7 +39,6 @@ class _QuizPageState extends State<QuizPage> {
 
   void _go(int delta) {
     if (widget.questions.isEmpty) return;
-    // simpan jawaban sekarang
     _answers[_idx] = _answerCtrl.text.trim();
 
     final to = _idx + delta;
@@ -75,7 +67,6 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     final int qTotal = widget.questions.length;
 
-    // =========== KOSONG ===========
     if (qTotal == 0) {
       return Scaffold(
         backgroundColor: kScaffold,
@@ -114,7 +105,6 @@ class _QuizPageState extends State<QuizPage> {
       );
     }
 
-    // =========== ADA SOAL ===========
     final String cleanTitle = widget.title.replaceFirst('Quiz – ', '');
     final String qText = widget.questions[_idx];
 
@@ -126,7 +116,6 @@ class _QuizPageState extends State<QuizPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Header back + title
               Row(
                 children: [
                   _roundIcon(
@@ -160,7 +149,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 16),
 
-              // Chips atas
               _whiteCard(
                 padding: const EdgeInsets.all(8),
                 child: Row(
@@ -173,14 +161,15 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 16),
 
-              // Banner ungu "Quiz Dasar..."
               Container(
                 decoration: BoxDecoration(
-                  color: kPurpleSoft.withOpacity(.75),
+                  color: kPurpleSoft.withValues(alpha: 0.75),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 18,
+                ),
                 child: Row(
                   children: [
                     Expanded(
@@ -198,7 +187,7 @@ class _QuizPageState extends State<QuizPage> {
                           Text(
                             'Lorem ipsum dolor sit amet',
                             style: GoogleFonts.poppins(
-                              color: Colors.white.withOpacity(.85),
+                              color: Colors.white.withValues(alpha: 0.85),
                               fontSize: 12,
                             ),
                           ),
@@ -223,7 +212,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 16),
 
-              // Indikator 1..N
               Wrap(
                 spacing: 10,
                 children: List.generate(qTotal, (i) {
@@ -259,7 +247,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 16),
 
-              // Kartu pertanyaan
               _whiteCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -285,7 +272,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 14),
 
-              // Input jawaban
               Text(
                 'Tuliskan Jawaban!',
                 style: GoogleFonts.poppins(
@@ -314,7 +300,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 24),
 
-              // Pager << 1 >>
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -348,7 +333,6 @@ class _QuizPageState extends State<QuizPage> {
               ),
               const SizedBox(height: 16),
 
-              // Tombol submit
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -378,7 +362,6 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  // ---------- Helpers ----------
   Widget _whiteCard({required Widget child, EdgeInsets? padding}) {
     return Container(
       width: double.infinity,
@@ -459,10 +442,7 @@ class _QuizPageState extends State<QuizPage> {
       child: Container(
         width: 34,
         height: 34,
-        decoration: const BoxDecoration(
-          color: kChipBg,
-          shape: BoxShape.circle,
-        ),
+        decoration: const BoxDecoration(color: kChipBg, shape: BoxShape.circle),
         child: Icon(icon, color: const Color(0xFF6B6B7A), size: 20),
       ),
     );

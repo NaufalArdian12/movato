@@ -22,17 +22,15 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
-  int? _expandedIndex; // untuk menentukan video mana yang terbuka
+  int? _expandedIndex;
 
-  // ---------------- LESSONS ----------------
   List<Map<String, String>> _lessonsFor(String key) {
     switch (key) {
       case 'fraction':
         return [
           {
             'title': 'Apa Itu Pecahan?',
-            'video':
-                'https://youtu.be/rZPrb1dmpXw?si=Xsmbxoqm9UY3nICB', // contoh YouTube
+            'video': 'https://youtu.be/rZPrb1dmpXw?si=Xsmbxoqm9UY3nICB',
           },
           {
             'title': 'Menghitung Besaran Pecahan Dalam Diagram',
@@ -92,7 +90,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     }
   }
 
-  // ---------------- QUIZ (pakai soal kamu) ----------------
   List<String> _quizFor(String key) {
     switch (key) {
       case 'shapes':
@@ -134,7 +131,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       body: SafeArea(
         child: Column(
           children: [
-            // ---------------- HEADER ----------------
             SizedBox(
               height: 260,
               child: Stack(
@@ -167,11 +163,11 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       onTap: () => Navigator.pop(context),
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.9),
+                          color: Colors.white.withValues(alpha: 0.9),
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.06),
+                              color: Colors.black.withValues(alpha: 0.06),
                               blurRadius: 6,
                               offset: const Offset(0, 3),
                             ),
@@ -189,7 +185,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               ),
             ),
 
-            // ---------------- BODY ----------------
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
@@ -216,7 +211,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     ),
                     const SizedBox(height: 16),
 
-                    // ---------------- LESSON LIST ----------------
                     ...lessons.asMap().entries.map((entry) {
                       final index = entry.key;
                       final lesson = entry.value;
@@ -227,9 +221,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                           InkWell(
                             onTap: () {
                               setState(() {
-                                _expandedIndex = isExpanded
-                                    ? null
-                                    : index; // toggle
+                                _expandedIndex = isExpanded ? null : index;
                               });
                             },
                             borderRadius: BorderRadius.circular(18),
@@ -244,7 +236,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black12.withOpacity(0.05),
+                                    color: Colors.black12.withValues(
+                                      alpha: 0.05,
+                                    ),
                                     blurRadius: 6,
                                     offset: const Offset(0, 3),
                                   ),
@@ -258,7 +252,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                     decoration: BoxDecoration(
                                       color: const Color(
                                         0xFF7B61FF,
-                                      ).withOpacity(0.12),
+                                      ).withValues(alpha: 0.12),
                                       shape: BoxShape.circle,
                                     ),
                                     alignment: Alignment.center,
@@ -292,7 +286,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                             ),
                           ),
 
-                          // ---------------- VIDEO SECTION ----------------
                           if (isExpanded)
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -306,7 +299,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       );
                     }),
 
-                    // ---------------- QUIZ BUTTON ----------------
                     if (quiz.isNotEmpty)
                       Container(
                         margin: const EdgeInsets.only(top: 20),
@@ -345,7 +337,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
   }
 }
 
-// ---------------- YOUTUBE PLAYER ----------------
 class YoutubePlayerWidget extends StatefulWidget {
   final String url;
   const YoutubePlayerWidget({super.key, required this.url});

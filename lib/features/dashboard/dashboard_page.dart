@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:movato/features/auth/presentation/progress/progress_page.dart';
 
 import 'package:movato/features/course/course_page.dart';
-import 'package:percent_indicator/percent_indicator.dart';
-
-import '../auth/presentation/progress/progress_page.dart';
-import '../profile/profile_page.dart';
+import 'package:movato/features/profile/profile_page.dart';
+import 'package:movato/src/core/widgets/course_card.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -44,7 +43,6 @@ class _DashboardPageState extends State<DashboardPage> {
     return 'Good Evening';
   }
 
-  // === Halaman berdasarkan bottom nav ===
   Widget _buildBody() {
     switch (_selectedIndex) {
       case 0:
@@ -69,14 +67,12 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ===== HOME (Dashboard) =====
   Widget _buildHomePage() {
     final today = DateFormat('EEEE, d MMMM', 'en_US').format(DateTime.now());
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // HEADER
         Container(
           width: double.infinity,
           padding: const EdgeInsets.fromLTRB(20, 30, 20, 24),
@@ -135,14 +131,13 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ===== Calendar =====
   Widget _buildCalendar(String today) {
     final days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
@@ -182,7 +177,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? Colors.orangeAccent
-                            : Colors.white.withOpacity(0.2),
+                            : Colors.white.withValues(alpha: 0.2),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -206,7 +201,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ===== Tabs (Class / Completed) =====
   Widget _buildTabs() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -252,87 +246,21 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  // ===== Card Class di Home =====
   Widget _buildClassCard(_ClassItem item) {
-    return GestureDetector(
-      onTap: () {
-        // Klik card → buka halaman Courses
+    return CourseCard(
+      title: item.title,
+      desc: item.subtitle,
+      progress: item.progress,
+      image: item.image,
+      onLearnMore: () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (_) => const CoursePage()),
         );
       },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
-        padding: const EdgeInsets.all(14),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withOpacity(0.05),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                item.image,
-                width: 80,
-                height: 80,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: GoogleFonts.poppins(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  Text(
-                    item.subtitle,
-                    style: GoogleFonts.poppins(
-                      fontSize: 13,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  LinearPercentIndicator(
-                    lineHeight: 6.0,
-                    percent: item.progress,
-                    barRadius: const Radius.circular(8),
-                    progressColor: item.color,
-                    backgroundColor: Colors.grey[200],
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Progress ${(item.progress * 100).toInt()}%',
-                    style: GoogleFonts.poppins(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 
-  // ===== Bottom Navigation =====
   Widget _bottomNav() {
     return BottomNavigationBar(
       currentIndex: _selectedIndex,
@@ -359,7 +287,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 }
 
-// ===== Model item kelas =====
 class _ClassItem {
   final String title;
   final String subtitle;

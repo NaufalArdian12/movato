@@ -1,5 +1,4 @@
 const quizBank = <String, List<String>>{
-  // Judul harus sama persis dengan yang kamu kirim dari Course/CourseDetail
   'Mengenal Bilangan Pecahan': [
     'Jelaskan apa itu bilangan pecahan?',
     'Ubah 1/2 menjadi persen.',

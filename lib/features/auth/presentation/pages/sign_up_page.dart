@@ -79,12 +79,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
       if (!mounted) return;
 
-      // Kasih info sukses
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Sign up success! Please log in.')),
       );
 
-      // Navigasi kembali ke halaman Login, bersihin stack
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const LoginPage()),
@@ -236,8 +234,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               const SizedBox(width: 16),
                               CircleAvatar(
                                 radius: 22,
-                                backgroundColor: AppColors.text.withOpacity(
-                                  0.08,
+                                backgroundColor: AppColors.text.withValues(
+                                  alpha: 0.08,
                                 ),
                                 child: const Icon(
                                   Icons.person,

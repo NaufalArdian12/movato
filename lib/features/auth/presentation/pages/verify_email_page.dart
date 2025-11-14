@@ -47,10 +47,8 @@ class VerifyEmailPage extends StatelessWidget {
                 AppButton(
                   text: 'Redirect to Gmail',
                   onPressed: () {
-                    // 1. Tutup dialog pakai context dialog
                     Navigator.of(dialogContext).pop();
 
-                    // 2. Ganti halaman ke form profil pakai context root
                     Navigator.pushReplacement(
                       rootContext,
                       MaterialPageRoute(

@@ -30,7 +30,6 @@ class _LoginPageState extends State<LoginPage> {
   final _auth = AuthService();
 
   bool _busy = false;
-  final bool _googleBusy = false;
   String? _emailError;
   String? _passError;
 
@@ -52,7 +51,6 @@ class _LoginPageState extends State<LoginPage> {
 
     if (emailErr != null || passErr != null) return;
 
-    // capture navigator & messenger sebelum await
     final navigator = Navigator.of(context);
     final messenger = ScaffoldMessenger.of(context);
 

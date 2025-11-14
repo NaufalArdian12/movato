@@ -57,7 +57,6 @@ class _SignUpStartPageState extends State<SignUpStartPage> {
             text: 'Continue with Google',
             isBusy: isLoading,
             onPressed: onGoogle,
-            // filled: false, // set true kalau mau versi solid
           );
         },
       ),

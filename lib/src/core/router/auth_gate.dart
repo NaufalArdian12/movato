@@ -16,9 +16,8 @@ class AuthGate extends ConsumerWidget {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     if (s is Authenticated) {
-      return const DashboardPage(); // atau DashboardPage(user: s.user) kalau konstruktor menerima user
+      return const DashboardPage();
     }
-    // Unauthenticated/AuthError → tampilkan LoginPage (error bisa kamu baca di dalam LoginPage pakai ref.watch)
     return const LoginPage();
   }
 }

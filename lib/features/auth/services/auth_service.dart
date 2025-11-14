@@ -1,9 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:movato/src/core/network/api_client.dart';
 
 class AuthService {
   final _api = ApiClient();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
 
   Future<void> login({required String email, required String password}) async {
     String deviceName = 'mobile';
@@ -14,7 +17,7 @@ class AuthService {
 
     try {
       final res = await _api.dio.post(
-        '/v1/auth/login',
+        '/auth/login',
         data: {'email': email, 'password': password, 'device_name': deviceName},
       );
 
@@ -32,7 +35,7 @@ class AuthService {
 
   Future<Map<String, dynamic>> me() async {
     try {
-      final res = await _api.dio.get('/v1/auth/me');
+      final res = await _api.dio.get('/auth/me');
       return (res.data['data'] as Map).cast<String, dynamic>();
     } on DioException catch (e) {
       throw Exception(_extractMessage(e));
@@ -40,12 +43,15 @@ class AuthService {
   }
 
   Future<void> logout() async {
+    // kalau mau sekalian logout dari Google juga:
+    try {
+      await _googleSignIn.signOut();
+    } catch (_) {}
+
     await _api.clearToken();
-    // optional: panggil endpoint revoke token kalau ada
   }
 
   String _extractMessage(DioException e) {
-    // Tangkap pesan khusus dari backend kamu
     final data = e.response?.data;
     final code = data is Map ? data['code'] : null;
     final message = data is Map
@@ -57,7 +63,6 @@ class AuthService {
     return '$message';
   }
 
-  //sign up
   Future<void> signup({
     required String email,
     required String username,
@@ -70,7 +75,7 @@ class AuthService {
     } catch (_) {}
     try {
       final res = await _api.dio.post(
-        '/v1/auth/signup',
+        '/auth/signup',
         data: {
           'email': email,
           'username': username,
@@ -88,6 +93,53 @@ class AuthService {
     } on DioException catch (e) {
       final msg = _extractMessage(e);
       throw Exception(msg);
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    String deviceName = 'mobile';
+    try {
+      final info = await PackageInfo.fromPlatform();
+      deviceName = 'movato_${info.appName}_${info.version}';
+    } catch (_) {}
+
+    try {
+      try {
+        await _googleSignIn.disconnect();
+      } catch (_) {}
+
+      final account = await _googleSignIn.signIn();
+      if (account == null) {
+        throw Exception('Login dengan Google dibatalkan');
+      }
+
+      final auth = await account.authentication;
+      final idToken = auth.idToken;
+      final accessToken = auth.accessToken;
+
+      if (idToken == null) {
+        throw Exception('Gagal mendapatkan id_token dari Google');
+      }
+
+      final res = await _api.dio.post(
+        '/auth/oauth/google/exchange',
+        data: {
+          'id_token': idToken,
+          'access_token': accessToken,
+          'device_name': deviceName,
+        },
+      );
+
+      final data = res.data['data'];
+
+      final token = data['token'] as String?;
+      if (token == null || token.isEmpty) {
+        throw Exception('Token tidak ditemukan dari server');
+      }
+
+      await _api.saveToken(token);
+    } on DioException catch (e) {
+      throw Exception(_extractMessage(e));
     }
   }
 }

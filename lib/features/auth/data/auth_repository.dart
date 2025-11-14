@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:movato/security/token_storage.dart';
 import 'package:movato/features/user/user_model.dart';
 
@@ -8,13 +9,19 @@ class AuthRepository {
   AuthRepository(this._dio, this._storage);
 
   Future<UserModel> exchangeGoogleIdToken(String idToken) async {
+    final fullUrl = '${_dio.options.baseUrl}/auth/oauth/google/exchange';
+    debugPrint('👉 [AuthRepository] Hitting URL: $fullUrl');
+
+    debugPrint(
+      '👉 [AuthRepository] connectTimeout: ${_dio.options.connectTimeout}',
+    );
+
     final res = await _dio.post(
       '/auth/oauth/google/exchange',
       data: {'id_token': idToken},
     );
-    final data = res.data['data'];
-    await _storage.save(data['access_token'], data['refresh_token']);
-    return UserModel.fromJson(data['user']);
+
+    return UserModel.fromJson(res.data['data']['user']);
   }
 
   Future<void> linkGoogleIdToken(String idToken) async {

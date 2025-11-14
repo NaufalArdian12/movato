@@ -11,7 +11,6 @@ class ProgressPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Header Gradient
             Container(
               width: double.infinity,
               height: 260,
@@ -48,7 +47,7 @@ class ProgressPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Image.asset(
-                      'assets/images/avatar.png', // ganti sesuai path kamu
+                      'assets/images/avatar.png',
                       height: 100,
                     ),
                     const SizedBox(height: 8),
@@ -74,7 +73,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Stats Cards
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -89,7 +87,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // Description
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Text(
@@ -106,7 +103,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // Quiz Section
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Align(
@@ -123,7 +119,6 @@ class ProgressPage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
 
-            // Quiz Card
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Container(
@@ -135,7 +130,7 @@ class ProgressPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(18),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
+                      color: Colors.grey.withValues(alpha: 0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 4),
                     ),
@@ -189,7 +184,7 @@ class ProgressPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.15),
+            color: Colors.grey.withValues(alpha: 0.15),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),

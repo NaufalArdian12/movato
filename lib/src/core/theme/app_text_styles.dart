@@ -49,7 +49,6 @@ class AppTextStyles {
     color: AppColors.text,
   );
 
-  // text di dalam field
   static TextStyle field = const TextStyle(
     fontFamily: _font,
     fontWeight: FontWeight.w400,

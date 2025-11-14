@@ -7,7 +7,7 @@ class GoogleButton extends StatelessWidget {
     this.text = 'Continue with Google',
     required this.onPressed,
     this.isBusy = false,
-    this.filled = false, // true = filled, false = outline
+    this.filled = false,
   });
 
   final String text;
@@ -17,7 +17,6 @@ class GoogleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // design tokens
     const double radius = 16;
     const double vPad = 12;
     const borderColor = Color(0xFFE4E4E7);
@@ -49,7 +48,6 @@ class GoogleButton extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                // icon kiri biar align center tetap pas
                 Align(
                   alignment: Alignment.centerLeft,
                   child: isBusy
@@ -67,7 +65,6 @@ class GoogleButton extends StatelessWidget {
                           height: 18,
                         ),
                 ),
-                // label
                 Text(
                   text,
                   textAlign: TextAlign.center,
@@ -77,7 +74,6 @@ class GoogleButton extends StatelessWidget {
                     fontSize: 16,
                   ).copyWith(color: fgColor),
                 ),
-                // spacer kanan biar Stack seimbang
                 const Align(
                   alignment: Alignment.centerRight,
                   child: SizedBox(width: 18, height: 18),

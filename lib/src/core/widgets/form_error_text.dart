@@ -7,7 +7,6 @@ class FormErrorText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      // page padding 16 + extra 16 agar sejajar dengan AppButton yang punya padding internal 16
       padding: const EdgeInsets.only(),
       child: Text(
         text,

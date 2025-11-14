@@ -27,38 +27,53 @@ class AuthScaffold extends StatelessWidget {
     return Scaffold(
       body: SafeArea(
         child: LayoutBuilder(
-          builder: (_, c) => SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: Insets.x4),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: c.maxHeight - Insets.x12),
-              child: IntrinsicHeight(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: Insets.x12 * 2),
-                    Center(child: SvgPicture.asset(logoPath, width: 120, height: 120)),
-                    Gaps.v32,
-                    Text(title, style: AppTextStyles.h1),
-                    Gaps.v12,
-                    Text(subtitle, style: AppTextStyles.subtitle),
-                    Gaps.v24,
+          builder: (_, c) {
+            final minHeight = (c.maxHeight - Insets.x12).clamp(
+              0.0,
+              double.infinity,
+            );
 
-                    // area form (kamu yang isi di masing2 page)
-                    form,
+            return SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: Insets.x4),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: minHeight),
+                child: IntrinsicHeight(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: Insets.x12 * 2),
+                      Center(
+                        child: SvgPicture.asset(
+                          logoPath,
+                          width: 120,
+                          height: 120,
+                        ),
+                      ),
+                      Gaps.v32,
+                      Text(title, style: AppTextStyles.h1),
+                      Gaps.v12,
+                      Text(subtitle, style: AppTextStyles.subtitle),
+                      Gaps.v24,
 
-                    Gaps.v24,
-                    primaryButton,
+                      form,
+                      Gaps.v24,
+                      primaryButton,
 
-                    const Spacer(),
-                    Center(child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: Insets.x2),
-                      child: footer,
-                    )),
-                  ],
+                      const Spacer(),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Insets.x2,
+                          ),
+                          child: footer,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

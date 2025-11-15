@@ -20,14 +20,14 @@ class CoursePage extends StatelessWidget {
         title: 'Pengenalan Bangun Ruang',
         desc: 'Kenali bentuk 3D di sekitar kita.',
         progress: 0.32,
-        image: 'assets/images/course_shape.png',
+        image: 'assets/images/class2.png',
         courseKey: 'shapes',
       ),
       _CourseData(
         title: 'Pengenalan Perkalian',
         desc: 'Dasar perkalian untuk pemula.',
         progress: 0.10,
-        image: 'assets/images/course_math.png',
+        image: 'assets/images/class3.png',
         courseKey: 'multiplication',
       ),
     ];

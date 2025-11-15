@@ -46,10 +46,9 @@ http://127.0.0.1:8000/api/v1
 
 _Add your screenshots here later:_
 
-/assets/screenshots/login.png
-/assets/screenshots/dashboard.png
-/assets/screenshots/course.png
-/assets/screenshots/essay.png
+assets/screenshots/dashboard.png
+assets/screenshots/login.png
+assets/screenshots/essay.png
 
 
 ---

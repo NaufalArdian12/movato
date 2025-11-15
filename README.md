@@ -44,11 +44,18 @@ http://127.0.0.1:8000/api/v1
 
 ## 📸 UI Screenshots
 
-_Add your screenshots here later:_
+<p align="center">
+  <img src="assets/screenshots/login.png" width="300" />
+</p>
 
-assets/screenshots/dashboard.png
-assets/screenshots/login.png
-assets/screenshots/essay.png
+<p align="center">
+  <img src="assets/screenshots/dashboard.png" width="300" />
+</p>
+
+<p align="center">
+  <img src="assets/screenshots/essay.png" width="300" />
+</p>
+
 
 
 ---

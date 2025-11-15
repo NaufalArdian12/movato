@@ -55,7 +55,7 @@ _Add your screenshots here later:_
 ---
 
 ## 📂 Project Structure
-
+```
 movato/
 ├── lib/
 │ ├── features/
@@ -73,7 +73,7 @@ movato/
 │ │ └── di/
 │ └── main.dart
 └── pubspec.yaml
-
+```
 
 ---
 

@@ -28,10 +28,17 @@ class _DashboardPageState extends State<DashboardPage> {
       color: const Color(0xFF7B61FF),
     ),
     _ClassItem(
-      title: 'Pengenalan Bangun Datar',
+      title: 'Pengenalan Bangun Ruang',
       subtitle: 'Lorem ipsum dolor sit amet',
       progress: 0.32,
       image: 'assets/images/class2.png',
+      color: const Color(0xFF9F79FF),
+    ),
+    _ClassItem(
+      title: 'Pengenalan Perkalian',
+      subtitle: 'Lorem ipsum dolor sit amet',
+      progress: 0.32,
+      image: 'assets/images/class3.png',
       color: const Color(0xFF9F79FF),
     ),
   ];

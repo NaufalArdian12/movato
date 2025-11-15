@@ -13,7 +13,7 @@ class ProgressPage extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 260,
+              height: 320,
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
@@ -47,8 +47,8 @@ class ProgressPage extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                     Image.asset(
-                      'assets/images/avatar.png',
-                      height: 100,
+                      'assets/images/quiz.png',
+                      height: 120,
                     ),
                     const SizedBox(height: 8),
                     Container(

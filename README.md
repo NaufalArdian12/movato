@@ -29,9 +29,9 @@ This project is currently developed as part of **PBL (Project-Based Learning)**.
 - Supabase (for some utilities & storage support)
 
 ### **Backend (Separate Repository)**
-- Laravel 11  
+- Laravel 12
 - REST API  
-- PostgreSQL/MySQL  
+- PostgreSQL
 - Token-based authentication  
 - Google OAuth Server Exchange  
 

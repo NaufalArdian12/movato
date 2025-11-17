@@ -30,58 +30,58 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         return [
           {
             'title': 'Apa Itu Pecahan?',
-            'video': 'https://youtu.be/rZPrb1dmpXw?si=Xsmbxoqm9UY3nICB',
+            'video': 'https://www.youtube.com/watch?v=0hPRfqPFtt8',
           },
           {
             'title': 'Menghitung Besaran Pecahan Dalam Diagram',
-            'video': 'https://www.youtube.com/watch?v=3JZ_D3ELwOQ',
+            'video': 'https://www.youtube.com/watch?v=0c_8H4w4DkY',
           },
 
           {
             'title': 'Menghitung Perkalian Pecahan Penyebut Berbeda',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=CfOScoklV3A',
           },
           {
             'title': 'Menghitung Perkalian Pecahan Campuran',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=s9alztxLsyk',
           },
         ];
       case 'shapes':
         return [
           {
             'title': 'Mengenal Kubus & Balok',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=EB2rOeSnheY',
           },
           {
             'title': 'Sisi, Rusuk, dan Titik Sudut',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=NdaOS3841h0',
           },
           {
             'title': 'Tabung, Kerucut, dan Bola',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=p0k_TWCMLZ8',
           },
           {
             'title': 'Contoh Bangun Ruang di Sekitar Kita',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=qAVBIYN23Zw',
           },
         ];
       case 'multiplication':
         return [
           {
             'title': 'Makna Perkalian sebagai Penjumlahan Berulang',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=N4ulEwN7wjw',
           },
           {
             'title': 'Perkalian Satuan Kecil',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=inSZoE5-n_g',
           },
           {
             'title': 'Perkalian Puluhan',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=Ed22Z6XHrho',
           },
           {
             'title': 'Latihan Perkalian Dasar',
-            'video': 'https://www.youtube.com/watch?v=ysz5S6PUM-U',
+            'video': 'https://www.youtube.com/watch?v=DoHeSR-iSws',
           },
         ];
 

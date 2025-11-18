@@ -239,7 +239,6 @@ class ProgressPage extends StatelessWidget {
 
           const Spacer(),
 
-          // ANGKA (lebih bold dan jelas)
           Text(
             value,
             style: GoogleFonts.poppins(

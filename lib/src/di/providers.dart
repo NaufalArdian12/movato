@@ -5,7 +5,7 @@ import 'package:movato/security/token_storage.dart';
 import '../core/network/dio_client.dart';
 import '../../features/auth/data/auth_repository.dart';
 
-final baseUrlProvider = Provider<String>((_) => 'http://127.0.0.1:8000/api/v1');
+final baseUrlProvider = Provider<String>((_) => 'https://eduapp-api-master-xgvx7r.laravel.cloud/api/v1');
 
 final tokenStorageProvider = Provider<TokenStorage>((_) => TokenStorage());
 

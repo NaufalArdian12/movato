@@ -7,7 +7,7 @@ class ApiClient {
   factory ApiClient() => _i;
   ApiClient._();
 
-  static const String baseUrl = 'http://127.0.0.1:8000/api/v1';
+  static const String baseUrl = 'https://eduapp-api-master-xgvx7r.laravel.cloud/api/v1';
 
   final _storage = const FlutterSecureStorage();
   late final Dio dio =

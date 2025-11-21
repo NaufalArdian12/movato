@@ -142,13 +142,12 @@ class _LoginPageState extends State<LoginPage> {
                 final navigator = Navigator.of(context);
                 final messenger = ScaffoldMessenger.of(context);
 
-                await ref
-                    .read(authNotifierProvider.notifier)
-                    .signInWithGoogle();
+                final authNotifier = ref.read(authNotifierProvider.notifier);
+                await authNotifier.signInWithGoogle();
 
-                final current = ref.read(authNotifierProvider);
                 if (!context.mounted) return;
 
+                final current = ref.read(authNotifierProvider);
                 if (current is Authenticated) {
                   messenger.showSnackBar(
                     const SnackBar(content: Text('Login with Google success')),
@@ -170,6 +169,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             },
           ),
+
           Gaps.v16,
           RichText(
             textAlign: TextAlign.center,

@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
+import 'package:movato/features/auth/data/auth_repository.dart';
 import 'package:movato/security/token_storage.dart';
-
-import '../core/network/dio_client.dart';
-import '../../features/auth/data/auth_repository.dart';
+import 'package:movato/src/core/network/dio_builder.dart';
 
 final baseUrlProvider = Provider<String>((_) => 'https://eduapp-api-master-xgvx7r.laravel.cloud/api/v1');
 

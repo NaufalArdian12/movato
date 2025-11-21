@@ -1,59 +1,128 @@
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:movato/security/token_storage.dart';
 
 class AuthInterceptor extends Interceptor {
   final TokenStorage storage;
-  final Dio authless;
+  final Dio authless; // dio tanpa interceptor (dipakai untuk refresh)
   bool _refreshing = false;
-  final _queue = <RequestOptions>[];
+
+  // queue of requests waiting for refresh: store completer and original RequestOptions
+  final List<_QueuedRequest> _queue = [];
 
   AuthInterceptor(this.storage, this.authless);
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
-    final token = await storage.readAccess();
-    if (token != null) options.headers['Authorization'] = 'Bearer $token';
+    try {
+      final token = await storage.readAccess();
+      if (token != null) {
+        options.headers['Authorization'] = 'Bearer $token';
+      }
+    } catch (_) {
+      // ignore storage errors, request tetap dilanjutkan
+    }
     handler.next(options);
   }
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    if (err.response?.statusCode == 401 && !_refreshing) {
-      _refreshing = true;
-      try {
-        final refresh = await storage.readRefresh();
-        if (refresh == null) return handler.next(err);
+    final status = err.response?.statusCode;
+    final reqOptions = err.requestOptions;
 
-        final res = await authless.post('/auth/refresh', data: {'refresh_token': refresh});
-        final data = res.data['data'];
-        await storage.save(data['access_token'], data['refresh_token']);
-
-        for (final req in _queue) {
-          req.headers['Authorization'] = 'Bearer ${data['access_token']}';
-          handler.resolve(await authless.fetch(req));
-        }
-        _queue.clear();
-        _refreshing = false;
-
-        final req = err.requestOptions;
-        req.headers['Authorization'] = 'Bearer ${data['access_token']}';
-        return handler.resolve(await authless.fetch(req));
-      } catch (_) {
-        _refreshing = false;
-        _queue.clear();
-        return handler.next(err);
-      }
-    } else if (err.response?.statusCode == 401 && _refreshing) {
-      _queue.add(err.requestOptions);
+    // Jika bukan 401, lanjutkan error biasa
+    if (status != 401) {
+      handler.next(err);
       return;
     }
-    handler.next(err);
+
+    // coba ambil refresh token
+    final refresh = await storage.readRefresh();
+    if (refresh == null) {
+      // tidak ada refresh -> tidak bisa refresh, lanjutkan error
+      handler.next(err);
+      return;
+    }
+
+    // Jika sedang refresh, queue request dan return (akan diselesaikan nanti)
+    if (_refreshing) {
+      final completer = Completer<Response>();
+      _queue.add(_QueuedRequest(reqOptions, completer));
+      try {
+        final response = await completer.future;
+        handler.resolve(response);
+      } catch (e) {
+        handler.next(err); // forward original error jika gagal
+      }
+      return;
+    }
+
+    // Mulai proses refresh
+    _refreshing = true;
+    try {
+      final res = await authless.post(
+        '/auth/refresh', // <-- pastikan ini path yang benar di backendmu
+        data: {'refresh_token': refresh},
+      );
+
+      final data = res.data['data'];
+      final newAccess = data['access_token'] as String?;
+      final newRefresh = data['refresh_token'] as String?;
+
+      if (newAccess == null || newRefresh == null) {
+        // refresh gagal
+        await storage.clear();
+        _failQueued(err);
+        handler.next(err);
+        _refreshing = false;
+        return;
+      }
+
+      // simpan token baru
+      await storage.save(newAccess, newRefresh);
+
+      // retry original request with new access token
+      final opts = reqOptions;
+      opts.headers['Authorization'] = 'Bearer $newAccess';
+
+      // buat request ulang menggunakan dio tanpa interceptor untuk menghindari loop
+      final retried = await authless.fetch(opts);
+      // selesaikan request yang memicu onError
+      handler.resolve(retried);
+
+      // selesaikan semua request yang queued: retry each and complete their completer
+      for (final queued in _queue) {
+        try {
+          queued.requestOptions.headers['Authorization'] = 'Bearer $newAccess';
+          final r = await authless.fetch(queued.requestOptions);
+          queued.completer.complete(r);
+        } catch (e) {
+          queued.completer.completeError(e);
+        }
+      }
+      _queue.clear();
+    } catch (e) {
+      // refresh gagal: clear storage, reject queued requests
+      await storage.clear();
+      _failQueued(err);
+      handler.next(err);
+    } finally {
+      _refreshing = false;
+    }
+  }
+
+  void _failQueued(DioException originalErr) {
+    for (final q in _queue) {
+      q.completer.completeError(originalErr);
+    }
+    _queue.clear();
   }
 }
 
-Dio buildDio(String baseUrl, TokenStorage storage) {
-  final authless = Dio(BaseOptions(baseUrl: baseUrl, connectTimeout: const Duration(seconds: 20)));
-  final dio = Dio(BaseOptions(baseUrl: baseUrl, connectTimeout: const Duration(seconds: 20)));
-  dio.interceptors.add(AuthInterceptor(storage, authless));
-  return dio;
+class _QueuedRequest {
+  final RequestOptions requestOptions;
+  final Completer<Response> completer;
+  _QueuedRequest(this.requestOptions, this.completer);
 }
+
+

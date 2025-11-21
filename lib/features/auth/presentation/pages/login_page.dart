@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   final _auth = AuthService();
 
   bool _busy = false;
+  bool _googleBusy = false;
   String? _emailError;
   String? _passError;
 

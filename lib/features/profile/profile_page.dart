@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:movato/src/core/constants/gaps.dart';
-import 'package:movato/src/core/theme/app_text_styles.dart';
-import 'package:movato/src/core/widgets/app_button.dart';
-import 'package:movato/src/core/widgets/app_text_field.dart';
-import 'package:movato/src/core/widgets/labeled_field.dart';
-import 'package:movato/src/core/theme/app_colors.dart';
+import '../../src/core/constants/gaps.dart';
+import '../../src/core/theme/app_text_styles.dart';
+import '../../src/core/widgets/app_button.dart';
+import '../../src/core/widgets/labeled_field.dart';
+import '../../src/core/widgets/avatar_widget.dart';
+import '../user/user_model.dart';
+import '../user/user_service.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,141 +15,141 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final emailController =
-      TextEditingController(text: "azkiyahtiarilah@gmail.com");
-  final usernameController =
-      TextEditingController(text: "azkiyahtiarilah");
-  final fullNameController =
-      TextEditingController(text: "Azkiya Ihtiarilah");
+  final _service = UserService();
 
-  String selectedEducation = "Elementary School Grade 3";
+  bool _isEdit = false;
+  UserModel? _user;
+
+  final _emailCtrl = TextEditingController();
+  final _fullNameCtrl = TextEditingController();
+  final _usernameCtrl = TextEditingController();
+  final _educationCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+
+  Future<void> _loadUser() async {
+    try {
+      final u = await _service.getMe();
+      setState(() {
+        _user = u;
+
+        _emailCtrl.text = u.email;
+        _fullNameCtrl.text = u.name;
+        _usernameCtrl.text = u.name.replaceAll(" ", "").toLowerCase();
+        _educationCtrl.text = "Elementary School Grade 1"; // placeholder
+      });
+    } catch (e) {
+      debugPrint("Error loading user: $e");
+    }
+  }
+
+  InputDecoration _buildDecoration({Widget? suffix}) {
+    return InputDecoration(
+      isDense: true,
+      contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFE4E4E7)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFFE4E4E7)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: const BorderSide(color: Color(0xFF4A35B0)),
+      ),
+      suffixIcon: suffix,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_user == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          _header(),
-          Expanded(child: _formSection()),
-        ],
-      ),
-    );
-  }
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            const SizedBox(height: 60),
 
-  Widget _header() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 32),
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Color(0xFF9C6CFF),
-            Color(0xFF6577FF),
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
-      child: Column(
-        children: [
-          Text(
-            "Profile Details",
-            style: AppTextStyles.h2.copyWith(color: Colors.white),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            "Edit your profile details here",
-            style: AppTextStyles.subtitle.copyWith(
-              color: Colors.white70,
+            Text("Profile Details", style: AppTextStyles.h2),
+            Gaps.v8,
+            Text(
+              "Edit your profile details here",
+              style: AppTextStyles.subtitle,
             ),
-          ),
+            Gaps.v24,
 
-          const SizedBox(height: 24),
+            AvatarWidget(imageUrl: _user!.avatar, size: 120),
+            Gaps.v16,
 
-          // avatar
-          Container(
-            height: 120,
-            width: 120,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
+            SizedBox(
+              width: 140,
+              child: AppButton(
+                text: _isEdit ? "Save" : "Edit",
+                onPressed: () {
+                  setState(() {
+                    _isEdit = !_isEdit;
+                  });
+                },
+              ),
             ),
-            padding: const EdgeInsets.all(12),
-            child: Image.asset(
-              "assets/images/monster.png",
-              fit: BoxFit.contain,
+
+            Gaps.v32,
+
+            // EMAIL - Not Editable
+            LabeledField(
+              label: "Email Address",
+              child: TextField(
+                controller: _emailCtrl,
+                readOnly: true,
+                decoration: _buildDecoration(),
+              ),
             ),
-          ),
+            Gaps.v16,
 
-          const SizedBox(height: 16),
-
-          AppButton(
-            text: "Edit",
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _formSection() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-      child: Column(
-        children: [
-          LabeledField(
-            label: "Email Address",
-            child: AppTextField(controller: emailController),
-          ),
-          Gaps.v24,
-
-          LabeledField(
-            label: "Username",
-            child: AppTextField(controller: usernameController),
-          ),
-          Gaps.v24,
-
-          LabeledField(
-            label: "Full Name",
-            child: AppTextField(controller: fullNameController),
-          ),
-          Gaps.v24,
-
-          LabeledField(
-            label: "Education",
-            child: _educationDropdown(),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _educationDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedEducation,
-          isExpanded: true,
-          icon: const Icon(Icons.keyboard_arrow_down),
-          onChanged: (value) {
-            if (value != null) {
-              setState(() => selectedEducation = value);
-            }
-          },
-          items: const [
-            DropdownMenuItem(
-              value: "Elementary School Grade 1",
-              child: Text("Elementary School Grade 1"),
+            // USERNAME
+            LabeledField(
+              label: "Username",
+              child: TextField(
+                controller: _usernameCtrl,
+                readOnly: !_isEdit,
+                decoration: _buildDecoration(),
+              ),
             ),
-            DropdownMenuItem(
-              value: "Elementary School Grade 2",
-              child: Text("Elementary School Grade 2"),
+            Gaps.v16,
+
+            // FULL NAME
+            LabeledField(
+              label: "Full Name",
+              child: TextField(
+                controller: _fullNameCtrl,
+                readOnly: !_isEdit,
+                decoration: _buildDecoration(),
+              ),
+            ),
+            Gaps.v16,
+
+            // EDUCATION
+            LabeledField(
+              label: "Education",
+              child: TextField(
+                controller: _educationCtrl,
+                readOnly: !_isEdit,
+                decoration: _buildDecoration(
+                  suffix: _isEdit ? const Icon(Icons.arrow_drop_down) : null,
+                ),
+              ),
             ),
           ],
         ),

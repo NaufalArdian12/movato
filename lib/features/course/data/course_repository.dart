@@ -7,7 +7,7 @@ class CourseRepository {
   final TokenStorage tokenStorage;
 
   CourseRepository(this.dio, this.tokenStorage);
-
+  //topic model
   Future<List<TopicModel>> getTopics() async {
     final response = await dio.get('/topics');
     final data = response.data['data'] as List;

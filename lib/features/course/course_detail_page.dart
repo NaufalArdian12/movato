@@ -24,6 +24,7 @@ class CourseDetailPage extends StatefulWidget {
 class _CourseDetailPageState extends State<CourseDetailPage> {
   int? _expandedIndex;
 
+
   List<Map<String, String>> _lessonsFor(String key) {
     switch (key) {
       case 'fraction':
@@ -36,7 +37,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             'title': 'Menghitung Besaran Pecahan Dalam Diagram',
             'video': 'https://www.youtube.com/watch?v=0c_8H4w4DkY',
           },
-
           {
             'title': 'Menghitung Perkalian Pecahan Penyebut Berbeda',
             'video': 'https://www.youtube.com/watch?v=CfOScoklV3A',
@@ -46,6 +46,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             'video': 'https://www.youtube.com/watch?v=s9alztxLsyk',
           },
         ];
+
       case 'shapes':
         return [
           {
@@ -65,6 +66,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
             'video': 'https://www.youtube.com/watch?v=qAVBIYN23Zw',
           },
         ];
+
       case 'multiplication':
         return [
           {
@@ -90,6 +92,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     }
   }
 
+
   List<String> _quizFor(String key) {
     switch (key) {
       case 'shapes':
@@ -97,9 +100,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           'Sebutkan tiga contoh benda di sekitar kita yang berbentuk kubus!',
           'Sebuah balok memiliki berapa sisi, rusuk, dan titik sudut?',
           'Benda berikut yang berbentuk tabung adalah ...',
-          'Perhatikan benda berikut: bola, dadu, kaleng, dan lemari. Benda yang tidak memiliki rusuk adalah …',
+          'Benda yang tidak memiliki rusuk adalah …',
           'Bangun ruang yang memiliki dua tutup berbentuk lingkaran dan satu selimut adalah …',
         ];
+
       case 'multiplication':
         return const [
           'Ada 3 piring. Setiap piring berisi 4 kue. Berapa jumlah seluruh kue?',
@@ -108,14 +112,16 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           'Hasil dari 6 × 6 adalah …',
           'Hasil dari 8 × 9 adalah …',
         ];
+
       case 'fraction':
         return const [
           'Pecahan 3/4 setara dengan berapa persen?',
           'Sederhanakan pecahan 8/12.',
-          'Manakah yang lebih besar: 2/3 atau 3/5? Jelaskan singkat.',
+          'Manakah yang lebih besar: 2/3 atau 3/5?',
           'Ubah 1 1/2 menjadi pecahan biasa.',
           'Hasil dari 2/5 + 1/5 adalah …',
         ];
+
       default:
         return const [];
     }
@@ -129,70 +135,73 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F7FB),
       body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 260,
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(32),
-                        bottomRight: Radius.circular(32),
-                      ),
-                      child: Image.asset(
-                        widget.image,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: const Color(0xFFEDE9FF),
-                          alignment: Alignment.center,
-                          child: Icon(
-                            Icons.menu_book_rounded,
-                            size: 64,
-                            color: Colors.deepPurple.shade300,
+        child: CustomScrollView(
+          slivers: [
+       
+            SliverAppBar(
+              pinned: false,
+              expandedHeight: 260,
+              backgroundColor: Colors.transparent,
+              automaticallyImplyLeading: false,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(32),
+                          bottomRight: Radius.circular(32),
+                        ),
+                        child: Image.asset(
+                          widget.image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            color: const Color(0xFFEDE9FF),
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.menu_book_rounded,
+                              size: 64,
+                              color: Colors.deepPurple.shade300,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 16,
-                    left: 16,
-                    child: GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.9),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.06),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        padding: const EdgeInsets.all(8),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
+
+                    Positioned(
+                      top: 16,
+                      left: 16,
+                      child: GestureDetector(
+                        onTap: () => Navigator.pop(context),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.9),
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.06),
+                                blurRadius: 6,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          padding: const EdgeInsets.all(8),
+                          child: const Icon(Icons.arrow_back, color: Colors.black),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
 
-            Expanded(
+            SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-                child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
                     Text(
                       widget.title,
                       style: GoogleFonts.poppins(
@@ -202,6 +211,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                       ),
                     ),
                     const SizedBox(height: 8),
+
                     Text(
                       widget.subtitle,
                       style: GoogleFonts.poppins(
@@ -224,7 +234,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                 _expandedIndex = isExpanded ? null : index;
                               });
                             },
-                            borderRadius: BorderRadius.circular(18),
                             child: Container(
                               margin: const EdgeInsets.only(bottom: 12),
                               padding: const EdgeInsets.symmetric(
@@ -236,9 +245,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                 borderRadius: BorderRadius.circular(18),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.black12.withValues(
-                                      alpha: 0.05,
-                                    ),
+                                    color: Colors.black12.withValues(alpha: 0.05),
                                     blurRadius: 6,
                                     offset: const Offset(0, 3),
                                   ),
@@ -246,13 +253,13 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                               ),
                               child: Row(
                                 children: [
+                                  // numbered circle
                                   Container(
                                     width: 36,
                                     height: 36,
                                     decoration: BoxDecoration(
-                                      color: const Color(
-                                        0xFF7B61FF,
-                                      ).withValues(alpha: 0.12),
+                                      color: const Color(0xFF7B61FF)
+                                          .withValues(alpha: 0.12),
                                       shape: BoxShape.circle,
                                     ),
                                     alignment: Alignment.center,
@@ -264,7 +271,9 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                       ),
                                     ),
                                   ),
+
                                   const SizedBox(width: 12),
+
                                   Expanded(
                                     child: Text(
                                       lesson['title']!,
@@ -275,6 +284,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                                       ),
                                     ),
                                   ),
+
                                   Icon(
                                     isExpanded
                                         ? Icons.keyboard_arrow_up
@@ -288,9 +298,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
 
                           if (isExpanded)
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: YoutubePlayerWidget(
                                 url: lesson['video'] ?? '',
                               ),

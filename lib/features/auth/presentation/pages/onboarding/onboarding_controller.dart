@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../login_page.dart';
+import 'package:movato/features/dashboard/dashboard_page.dart';
 
 class OnboardingController {
   final PageController pageController = PageController();
@@ -17,9 +17,7 @@ class OnboardingController {
   void finishOnboarding(BuildContext context) {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(
-        builder: (_) => const LoginPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const DashboardPage()),
     );
   }
 }

@@ -20,7 +20,7 @@ class EducationPage extends StatelessWidget {
         children: [
           const Spacer(),
 
-          Center(child: Image.asset("assets/images/monster2.png", height: 150)),
+          Center(child: Image.asset("assets/images/class4.jpg", height: 150)),
 
           const SizedBox(height: 20),
 
@@ -56,7 +56,7 @@ class EducationPage extends StatelessWidget {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                controller.finishOnboarding(context);
+                controller.finishOnboarding(context); // ⬅️ ini
               },
               child: const Text("Continue"),
             ),

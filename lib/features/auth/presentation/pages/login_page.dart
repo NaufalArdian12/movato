@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movato/features/auth/presentation/pages/sign_up_start_page.dart';
-import 'package:movato/features/dashboard/dashboard_page.dart';
 import 'package:movato/src/core/widgets/auth_scaffold.dart';
 import 'package:movato/src/core/widgets/app_text_field.dart';
 import 'package:movato/src/core/widgets/google_button.dart';
@@ -18,6 +17,9 @@ import 'package:movato/features/auth/services/auth_service.dart';
 import 'package:movato/features/auth/state/auth_notifier.dart';
 import 'package:movato/features/auth/state/auth_state.dart';
 
+// ✅ TAMBAH INI: import OnboardingPage
+import 'onboarding/onboarding_page.dart'; 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
   @override
@@ -30,7 +32,7 @@ class _LoginPageState extends State<LoginPage> {
   final _auth = AuthService();
 
   bool _busy = false;
-  bool _googleBusy = false;
+  bool _googleBusy = false; // (masih belum kepakai, tapi biarin dulu)
   String? _emailError;
   String? _passError;
 
@@ -64,8 +66,15 @@ class _LoginPageState extends State<LoginPage> {
       if (!mounted) return;
 
       messenger.showSnackBar(const SnackBar(content: Text('Login success')));
+
+      // 🔥 DI SINI DIGANTI:
+      // DULU: langsung ke DashboardPage
+      // navigator.pushReplacement(
+      //   MaterialPageRoute(builder: (_) => const DashboardPage()),
+      // );
+      // SEKARANG: ke OnboardingPage dulu
       navigator.pushReplacement(
-        MaterialPageRoute(builder: (_) => const DashboardPage()),
+        MaterialPageRoute(builder: (_) => OnboardingPage()),
       );
     } catch (e) {
       if (!mounted) return;
@@ -152,8 +161,15 @@ class _LoginPageState extends State<LoginPage> {
                   messenger.showSnackBar(
                     const SnackBar(content: Text('Login with Google success')),
                   );
+
+                  // 🔥 DI SINI JUGA DIGANTI:
+                  // DULU: langsung ke DashboardPage
+                  // navigator.pushReplacement(
+                  //   MaterialPageRoute(builder: (_) => const DashboardPage()),
+                  // );
+                  // SEKARANG: ke OnboardingPage dulu
                   navigator.pushReplacement(
-                    MaterialPageRoute(builder: (_) => const DashboardPage()),
+                    MaterialPageRoute(builder: (_) => OnboardingPage()),
                   );
                 } else if (current is AuthError) {
                   messenger.showSnackBar(

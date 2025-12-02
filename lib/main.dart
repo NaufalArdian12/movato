@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-
-// SESUAIKAN path ini dengan punyamu, dari screenshot tadi kira-kira:
-import 'features/auth/presentation/pages/onboarding/onboarding_page.dart';
+import 'src/core/router/auth_gate.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +12,10 @@ class MovatoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Movato',
       debugShowCheckedModeBanner: false,
-      // 🔥 MULAI dari ONBOARDING, BUKAN AuthGate
-      home: OnboardingPage(),
+      home: AuthGate(), // ⬅️ balik ke sini
     );
   }
 }

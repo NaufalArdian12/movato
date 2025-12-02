@@ -17,7 +17,7 @@ class NameInputPage extends StatelessWidget {
 
           Center(
             child: Image.asset(
-              "assets/images/monster1.png",
+              "assets/images/class4.jpg",
               height: 150,
             ),
           ),
@@ -56,7 +56,7 @@ class NameInputPage extends StatelessWidget {
             height: 50,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: const Color.fromARGB(255, 245, 244, 246),
               ),
               onPressed: () {
                 controller.nextPage();

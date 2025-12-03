@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../src/core/constants/gaps.dart';
 import '../../src/core/theme/app_text_styles.dart';
 import '../../src/core/widgets/app_button.dart';
@@ -6,16 +7,17 @@ import '../../src/core/widgets/labeled_field.dart';
 import '../../src/core/widgets/avatar_widget.dart';
 import '../user/user_model.dart';
 import '../user/user_service.dart';
+import 'package:movato/src/di/providers.dart';
 
-class ProfilePage extends StatefulWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final _service = UserService();
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  late final UserService _service;
 
   bool _isEdit = false;
   bool _loading = true;
@@ -29,7 +31,23 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _loadUser();
+
+    _init();
+  }
+
+  Future<void> _init() async {
+    // ambil service dari provider
+    _service = ref.read(userServiceProvider);
+    await _loadUser();
+  }
+
+  @override
+  void dispose() {
+    _emailCtrl.dispose();
+    _fullNameCtrl.dispose();
+    _usernameCtrl.dispose();
+    _educationCtrl.dispose();
+    super.dispose();
   }
 
   Future<void> _loadUser() async {
@@ -102,10 +120,8 @@ class _ProfilePageState extends State<ProfilePage> {
             Text("Edit your profile details here",
                 style: AppTextStyles.subtitle),
             Gaps.v24,
-
-            AvatarWidget(imageUrl: _user!.avatar, size: 120),
+            AvatarWidget(imageUrl: _user!.avatarUrl, size: 120),
             Gaps.v16,
-
             SizedBox(
               width: 140,
               child: AppButton(
@@ -115,10 +131,8 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
               ),
             ),
-
             Gaps.v32,
 
-            // EMAIL
             LabeledField(
               label: "Email Address",
               child: TextField(
@@ -128,8 +142,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Gaps.v16,
-
-            // USERNAME
             LabeledField(
               label: "Username",
               child: TextField(
@@ -139,8 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Gaps.v16,
-
-            // FULL NAME
             LabeledField(
               label: "Full Name",
               child: TextField(
@@ -150,8 +160,6 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Gaps.v16,
-
-            // EDUCATION
             LabeledField(
               label: "Education",
               child: TextField(

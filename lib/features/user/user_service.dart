@@ -1,75 +1,65 @@
-import 'dart:convert';
-import 'package:flutter/foundation.dart';
-import 'package:http/http.dart' as http;
-import '../../security/token_storage.dart';
+import 'package:dio/dio.dart';
+import 'package:movato/security/token_storage.dart';
 import 'user_model.dart';
 
 class UserService {
-  final _storage = TokenStorage();
+  final Dio dio;
+  final TokenStorage storage;
 
-  final String baseUrl = 
-      "https://eduapp-api-master-xgvx7r.laravel.cloud/api/v1/auth";
+  UserService(this.dio, this.storage);
 
-
-  // Login
   Future<UserModel> login({
     required String email,
     required String password,
   }) async {
-    final url = Uri.parse("$baseUrl/login");
+    try {
+      final res = await dio.post(
+        "/auth/login",
+        data: {"email": email, "password": password},
+      );
 
-    final res = await http.post(
-      url,
-      headers: {"Accept": "application/json"},
-      body: {"email": email, "password": password},
-    );
+      final data = res.data;
 
-    if (res.statusCode != 200) {
-      throw Exception("Login gagal: ${res.body}");
+      final access = data["access_token"];
+      final refresh = data["refresh_token"];
+
+      if (access == null) {
+        throw Exception("Server tidak memberikan access token");
+      }
+
+      await storage.save(access, refresh ?? "");
+
+      return UserModel.fromJson(data["user"]);
+    } on DioException catch (e) {
+      throw Exception("Login gagal: ${e.response?.data ?? e.message}");
     }
-
-    final data = jsonDecode(res.body);
-
-    final access = data["access_token"];
-    final refresh = data["refresh_token"];
-
-    if (access == null) {
-      throw Exception("Token tidak diterima dari server");
-    }
-
-    await _storage.save(access, refresh ?? "");
-
-    return UserModel.fromJson(data["user"]);
   }
 
-  // GET PROFILE / ME
   Future<UserModel> getMe() async {
-    final token = await _storage.readAccess();
-
+    final token = await storage.readAccess();
     if (token == null) {
       throw Exception("Token tidak ditemukan, login ulang");
     }
 
-    final url = Uri.parse("$baseUrl/me");
+    try {
+      final res = await dio.get(
+        "/profile",
+        options: Options(headers: {"Authorization": "Bearer $token"}),
+      );
 
-    final res = await http.get(
-      url,
-      headers: {
-        "Authorization": "Bearer $token",
-        "Accept": "application/json",
-      },
-    );
+      final json = res.data;
+      // Backend kamu: { "status": "success", "data": { "user": { ... } } }
+      final userJson = (json?['data']?['user']) ?? json?['data'] ?? json;
 
-    debugPrint("getMe() STATUS => ${res.statusCode}");
-    debugPrint("getMe() BODY => ${res.body}");
+      if (userJson == null) {
+        throw Exception("Response tidak berisi user");
+      }
 
-    if (res.statusCode != 200) {
-      throw Exception("Gagal memuat data user");
+      return UserModel.fromJson(userJson as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw Exception("Gagal memuat profile: ${e.response?.data ?? e.message}");
+    } catch (e) {
+      throw Exception("Error loading user: $e");
     }
-
-    final json = jsonDecode(res.body);
-
-    final userJson = json["data"] ?? json["user"] ?? json;
-    return UserModel.fromJson(userJson);
   }
 }

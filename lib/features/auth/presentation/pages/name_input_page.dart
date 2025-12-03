@@ -17,7 +17,7 @@ class NameInputPage extends StatelessWidget {
 
           Center(
             child: Image.asset(
-              "assets/images/class4.jpg",
+              "assets/images/class7.jpg",
               height: 150,
             ),
           ),

@@ -20,7 +20,7 @@ class EducationPage extends StatelessWidget {
         children: [
           const Spacer(),
 
-          Center(child: Image.asset("assets/images/class4.jpg", height: 150)),
+          Center(child: Image.asset("assets/images/class8.jpg", height: 150)),
 
           const SizedBox(height: 20),
 

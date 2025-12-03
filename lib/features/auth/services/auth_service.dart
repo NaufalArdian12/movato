@@ -1,22 +1,29 @@
+// lib/features/auth/data/auth_service.dart
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:movato/src/core/network/api_client.dart';
+import 'package:movato/security/token_storage.dart';
 
 class AuthService {
-  final _api = ApiClient();
-
+  final Dio dio;
+  final TokenStorage tokenStorage;
   final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
 
-  Future<void> login({required String email, required String password}) async {
-    String deviceName = 'mobile';
+  AuthService({required this.dio, required this.tokenStorage});
+
+  Future<String> _deviceName() async {
     try {
       final info = await PackageInfo.fromPlatform();
-      deviceName = 'movato_${info.appName}_${info.version}';
-    } catch (_) {}
+      return 'movato_${info.appName}_${info.version}';
+    } catch (_) {
+      return 'mobile';
+    }
+  }
 
+  Future<void> login({required String email, required String password}) async {
+    final deviceName = await _deviceName();
     try {
-      final res = await _api.dio.post(
+      final res = await dio.post(
         '/auth/login',
         data: {'email': email, 'password': password, 'device_name': deviceName},
       );
@@ -26,16 +33,15 @@ class AuthService {
       if (token == null || token.isEmpty) {
         throw Exception('Token tidak ditemukan');
       }
-      await _api.saveToken(token);
+      await tokenStorage.writeAccess(token);
     } on DioException catch (e) {
-      final msg = _extractMessage(e);
-      throw Exception(msg);
+      throw Exception(_extractMessage(e));
     }
   }
 
   Future<Map<String, dynamic>> me() async {
     try {
-      final res = await _api.dio.get('/auth/me');
+      final res = await dio.get('/auth/me');
       return (res.data['data'] as Map).cast<String, dynamic>();
     } on DioException catch (e) {
       throw Exception(_extractMessage(e));
@@ -43,12 +49,10 @@ class AuthService {
   }
 
   Future<void> logout() async {
-    // kalau mau sekalian logout dari Google juga:
     try {
       await _googleSignIn.signOut();
     } catch (_) {}
-
-    await _api.clearToken();
+    await tokenStorage.clearAccess();
   }
 
   String _extractMessage(DioException e) {
@@ -68,13 +72,9 @@ class AuthService {
     required String username,
     required String password,
   }) async {
-    String deviceName = 'mobile';
+    final deviceName = await _deviceName();
     try {
-      final info = await PackageInfo.fromPlatform();
-      deviceName = 'movato_${info.appName}_${info.version}';
-    } catch (_) {}
-    try {
-      final res = await _api.dio.post(
+      final res = await dio.post(
         '/auth/signup',
         data: {
           'email': email,
@@ -89,20 +89,14 @@ class AuthService {
       if (token == null || token.isEmpty) {
         throw Exception('Token tidak ditemukan');
       }
-      await _api.saveToken(token);
+      await tokenStorage.writeAccess(token);
     } on DioException catch (e) {
-      final msg = _extractMessage(e);
-      throw Exception(msg);
+      throw Exception(_extractMessage(e));
     }
   }
 
   Future<void> loginWithGoogle() async {
-    String deviceName = 'mobile';
-    try {
-      final info = await PackageInfo.fromPlatform();
-      deviceName = 'movato_${info.appName}_${info.version}';
-    } catch (_) {}
-
+    final deviceName = await _deviceName();
     try {
       try {
         await _googleSignIn.disconnect();
@@ -121,7 +115,7 @@ class AuthService {
         throw Exception('Gagal mendapatkan id_token dari Google');
       }
 
-      final res = await _api.dio.post(
+      final res = await dio.post(
         '/auth/oauth/google/exchange',
         data: {
           'id_token': idToken,
@@ -131,15 +125,14 @@ class AuthService {
       );
 
       final data = res.data['data'];
-
       final token = data['token'] as String?;
       if (token == null || token.isEmpty) {
         throw Exception('Token tidak ditemukan dari server');
       }
-
-      await _api.saveToken(token);
+      await tokenStorage.writeAccess(token);
     } on DioException catch (e) {
       throw Exception(_extractMessage(e));
     }
   }
+  
 }

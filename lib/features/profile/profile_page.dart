@@ -18,6 +18,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final _service = UserService();
 
   bool _isEdit = false;
+  bool _loading = true;
   UserModel? _user;
 
   final _emailCtrl = TextEditingController();
@@ -34,20 +35,27 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _loadUser() async {
     try {
       final u = await _service.getMe();
+
       setState(() {
         _user = u;
+        _loading = false;
 
         _emailCtrl.text = u.email;
         _fullNameCtrl.text = u.name;
+
+        // Tidak ada username di model → generate
         _usernameCtrl.text = u.name.replaceAll(" ", "").toLowerCase();
-        _educationCtrl.text = "Elementary School Grade 1"; // placeholder
+
+        // Tidak ada education di model → placeholder
+        _educationCtrl.text = "Elementary School Grade 1";
       });
     } catch (e) {
       debugPrint("Error loading user: $e");
+      setState(() => _loading = false);
     }
   }
 
-  InputDecoration _buildDecoration({Widget? suffix}) {
+  InputDecoration _dec({Widget? suffix}) {
     return InputDecoration(
       isDense: true,
       contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
@@ -69,9 +77,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (_user == null) {
+    if (_loading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    if (_user == null) {
+      return const Scaffold(
+        body: Center(
+          child: Text("Failed to load user data."),
+        ),
       );
     }
 
@@ -81,13 +97,10 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             const SizedBox(height: 60),
-
             Text("Profile Details", style: AppTextStyles.h2),
             Gaps.v8,
-            Text(
-              "Edit your profile details here",
-              style: AppTextStyles.subtitle,
-            ),
+            Text("Edit your profile details here",
+                style: AppTextStyles.subtitle),
             Gaps.v24,
 
             AvatarWidget(imageUrl: _user!.avatar, size: 120),
@@ -98,22 +111,20 @@ class _ProfilePageState extends State<ProfilePage> {
               child: AppButton(
                 text: _isEdit ? "Save" : "Edit",
                 onPressed: () {
-                  setState(() {
-                    _isEdit = !_isEdit;
-                  });
+                  setState(() => _isEdit = !_isEdit);
                 },
               ),
             ),
 
             Gaps.v32,
 
-            // EMAIL - Not Editable
+            // EMAIL
             LabeledField(
               label: "Email Address",
               child: TextField(
                 controller: _emailCtrl,
                 readOnly: true,
-                decoration: _buildDecoration(),
+                decoration: _dec(),
               ),
             ),
             Gaps.v16,
@@ -124,7 +135,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextField(
                 controller: _usernameCtrl,
                 readOnly: !_isEdit,
-                decoration: _buildDecoration(),
+                decoration: _dec(),
               ),
             ),
             Gaps.v16,
@@ -135,7 +146,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextField(
                 controller: _fullNameCtrl,
                 readOnly: !_isEdit,
-                decoration: _buildDecoration(),
+                decoration: _dec(),
               ),
             ),
             Gaps.v16,
@@ -146,7 +157,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: TextField(
                 controller: _educationCtrl,
                 readOnly: !_isEdit,
-                decoration: _buildDecoration(
+                decoration: _dec(
                   suffix: _isEdit ? const Icon(Icons.arrow_drop_down) : null,
                 ),
               ),

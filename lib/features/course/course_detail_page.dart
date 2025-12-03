@@ -22,9 +22,6 @@ class CourseDetailPage extends StatefulWidget {
 }
 
 class _CourseDetailPageState extends State<CourseDetailPage> {
-  int? _expandedIndex;
-
-
   List<Map<String, String>> _lessonsFor(String key) {
     switch (key) {
       case 'fraction':
@@ -32,18 +29,26 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           {
             'title': 'Apa Itu Pecahan?',
             'video': 'https://www.youtube.com/watch?v=0hPRfqPFtt8',
+            'desc':
+                'Di materi ini kamu akan mengenal apa itu pecahan, pembilang, penyebut, dan contoh penggunaannya dalam kehidupan sehari-hari.',
           },
           {
             'title': 'Menghitung Besaran Pecahan Dalam Diagram',
             'video': 'https://www.youtube.com/watch?v=0c_8H4w4DkY',
+            'desc':
+                'Kamu belajar membaca dan menghitung pecahan menggunakan diagram gambar seperti lingkaran atau persegi yang dibagi beberapa bagian.',
           },
           {
             'title': 'Menghitung Perkalian Pecahan Penyebut Berbeda',
             'video': 'https://www.youtube.com/watch?v=CfOScoklV3A',
+            'desc':
+                'Materi ini menjelaskan langkah mudah mengalikan dua pecahan yang penyebutnya berbeda.',
           },
           {
             'title': 'Menghitung Perkalian Pecahan Campuran',
             'video': 'https://www.youtube.com/watch?v=s9alztxLsyk',
+            'desc':
+                'Di sini kamu belajar mengubah pecahan campuran menjadi pecahan biasa dan menghitung perkaliannya.',
           },
         ];
 
@@ -52,18 +57,26 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           {
             'title': 'Mengenal Kubus & Balok',
             'video': 'https://www.youtube.com/watch?v=EB2rOeSnheY',
+            'desc':
+                'Kamu akan mengenal bangun ruang kubus dan balok: jumlah sisi, rusuk, dan titik sudutnya.',
           },
           {
             'title': 'Sisi, Rusuk, dan Titik Sudut',
             'video': 'https://www.youtube.com/watch?v=NdaOS3841h0',
+            'desc':
+                'Materi ini membantumu membedakan mana yang disebut sisi, rusuk, dan titik sudut pada bangun ruang.',
           },
           {
             'title': 'Tabung, Kerucut, dan Bola',
             'video': 'https://www.youtube.com/watch?v=p0k_TWCMLZ8',
+            'desc':
+                'Kamu akan mengenal bangun ruang tabung, kerucut, dan bola beserta contoh bendanya di sekitar kita.',
           },
           {
             'title': 'Contoh Bangun Ruang di Sekitar Kita',
             'video': 'https://www.youtube.com/watch?v=qAVBIYN23Zw',
+            'desc':
+                'Di materi ini kamu diajak mengamati benda-benda di rumah dan sekolah yang bentuknya seperti bangun ruang.',
           },
         ];
 
@@ -72,18 +85,26 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
           {
             'title': 'Makna Perkalian sebagai Penjumlahan Berulang',
             'video': 'https://www.youtube.com/watch?v=N4ulEwN7wjw',
+            'desc':
+                'Kamu belajar bahwa perkalian adalah penjumlahan yang diulang berkali-kali, dengan contoh yang sederhana.',
           },
           {
             'title': 'Perkalian Satuan Kecil',
             'video': 'https://www.youtube.com/watch?v=inSZoE5-n_g',
+            'desc':
+                'Di materi ini kamu berlatih mengalikan bilangan satuan kecil seperti 2×3, 4×5, dan lainnya.',
           },
           {
             'title': 'Perkalian Puluhan',
             'video': 'https://www.youtube.com/watch?v=Ed22Z6XHrho',
+            'desc':
+                'Kamu akan belajar trik mudah mengalikan bilangan puluhan supaya lebih cepat.',
           },
           {
             'title': 'Latihan Perkalian Dasar',
             'video': 'https://www.youtube.com/watch?v=DoHeSR-iSws',
+            'desc':
+                'Materi ini berisi latihan soal untuk menguatkan pemahaman perkalian dasar yang sudah dipelajari.',
           },
         ];
 
@@ -91,7 +112,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
         return [];
     }
   }
-
 
   List<String> _quizFor(String key) {
     switch (key) {
@@ -137,7 +157,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-       
+            // HEADER GAMBAR
             SliverAppBar(
               pinned: false,
               expandedHeight: 260,
@@ -167,7 +187,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         ),
                       ),
                     ),
-
                     Positioned(
                       top: 16,
                       left: 16,
@@ -186,7 +205,10 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                             ],
                           ),
                           padding: const EdgeInsets.all(8),
-                          child: const Icon(Icons.arrow_back, color: Colors.black),
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -195,13 +217,17 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
               ),
             ),
 
+            // ISI
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 16,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
+                    // Judul course
                     Text(
                       widget.title,
                       style: GoogleFonts.poppins(
@@ -212,6 +238,7 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                     ),
                     const SizedBox(height: 8),
 
+                    // Subtitle course
                     Text(
                       widget.subtitle,
                       style: GoogleFonts.poppins(
@@ -219,100 +246,147 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                         color: Colors.grey[600],
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 20),
 
+                    // LIST KARTU MATERI
                     ...lessons.asMap().entries.map((entry) {
                       final index = entry.key;
                       final lesson = entry.value;
-                      final isExpanded = _expandedIndex == index;
 
-                      return Column(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                _expandedIndex = isExpanded ? null : index;
-                              });
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 14,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(18),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12.withValues(alpha: 0.05),
-                                    blurRadius: 6,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  // numbered circle
-                                  Container(
-                                    width: 36,
-                                    height: 36,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF7B61FF)
-                                          .withValues(alpha: 0.12),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      '${index + 1}',
-                                      style: GoogleFonts.poppins(
-                                        fontWeight: FontWeight.w700,
-                                        color: const Color(0xFF7B61FF),
-                                      ),
-                                    ),
-                                  ),
-
-                                  const SizedBox(width: 12),
-
-                                  Expanded(
-                                    child: Text(
-                                      lesson['title']!,
-                                      style: GoogleFonts.poppins(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                  ),
-
-                                  Icon(
-                                    isExpanded
-                                        ? Icons.keyboard_arrow_up
-                                        : Icons.play_arrow_rounded,
-                                    color: const Color(0xFF7B61FF),
-                                  ),
-                                ],
+                      return Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.05),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          leading: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: const Color(
+                                0xFF7B61FF,
+                              ).withValues(alpha: 0.12),
+                              shape: BoxShape.circle,
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${index + 1}',
+                              style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFF7B61FF),
                               ),
                             ),
                           ),
-
-                          if (isExpanded)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                              child: YoutubePlayerWidget(
-                                url: lesson['video'] ?? '',
-                              ),
+                          title: Text(
+                            lesson['title'] ?? '',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
                             ),
-                        ],
+                          ),
+                          subtitle: Text(
+                            lesson['desc'] ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          trailing: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Color(0xFF7B61FF),
+                            ),
+                            child: const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => VideoPlayerPage(
+                                  courseTitle: widget.title,
+                                  lessons: lessons,
+                                  quiz: quiz,
+                                  initialIndex: index,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       );
-                    }),
+                    }).toList(),
 
+                    // KARTU QUIZ UNGU
                     if (quiz.isNotEmpty)
                       Container(
-                        margin: const EdgeInsets.only(top: 20),
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
+                        margin: const EdgeInsets.only(top: 8, bottom: 24),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF6A4EFF), Color(0xFF9B7BFF)],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.08),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          title: Text(
+                            'Quiz Dasar Pecahan',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Latihan soal dasar mengenai materi ini',
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                          ),
+                          trailing: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: const Icon(
+                              Icons.quiz_outlined,
+                              color: Color(0xFF6A4EFF),
+                            ),
+                          ),
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -323,15 +397,6 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
                               ),
                             );
                           },
-                          icon: const Icon(Icons.quiz_outlined),
-                          label: const Text("Mulai Quiz"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF7B61FF),
-                            padding: const EdgeInsets.symmetric(vertical: 14),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
                         ),
                       ),
                   ],
@@ -344,6 +409,243 @@ class _CourseDetailPageState extends State<CourseDetailPage> {
     );
   }
 }
+
+// ================== VIDEO PAGE (KAYAK YOUTUBE) ==================
+
+class VideoPlayerPage extends StatefulWidget {
+  final String courseTitle;
+  final List<Map<String, String>> lessons;
+  final List<String> quiz;
+  final int initialIndex;
+
+  const VideoPlayerPage({
+    super.key,
+    required this.courseTitle,
+    required this.lessons,
+    required this.quiz,
+    required this.initialIndex,
+  });
+
+  @override
+  State<VideoPlayerPage> createState() => _VideoPlayerPageState();
+}
+
+class _VideoPlayerPageState extends State<VideoPlayerPage> {
+  late int _currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final lesson = widget.lessons[_currentIndex];
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: Text(
+          lesson['title'] ?? '',
+          style: GoogleFonts.poppins(
+            fontSize: 14,
+            color: Colors.white,
+          ),
+        ),
+      ),
+      body: Column(
+        children: [
+          // ===== VIDEO DI ATAS =====
+          AspectRatio(
+            aspectRatio: 16 / 9,
+            child: YoutubePlayerWidget(
+              url: lesson['video'] ?? '',
+            ),
+          ),
+
+          // ===== KONTEN DI BAWAH (judul + deskripsi + list materi + quiz) =====
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+              ),
+              child: ListView(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+                children: [
+                  // judul materi aktif
+                  Text(
+                    lesson['title'] ?? '',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  // deskripsi materi aktif
+                  Text(
+                    lesson['desc'] ?? '',
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      color: Colors.grey[800],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // daftar materi selanjutnya (dan sebelumnya) — playlist
+                  ...widget.lessons.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final item = entry.value;
+                    final isActive = index == _currentIndex;
+
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 10),
+                        decoration: BoxDecoration(
+                          color: isActive
+                              ? const Color(0xFFE6DEFF)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(18),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.05),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
+                          title: Text(
+                            item['title'] ?? '',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
+                          ),
+                          subtitle: Text(
+                            item['desc'] ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: Colors.grey[700],
+                            ),
+                          ),
+                          trailing: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: isActive
+                                  ? const Color(0xFF6A4EFF)
+                                  : const Color(0xFF7B61FF),
+                            ),
+                            child: const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+
+                  // kartu quiz di paling bawah (kalau ada)
+                  if (widget.quiz.isNotEmpty)
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => QuizPage(
+                              title: 'Quiz – ${widget.courseTitle}',
+                              questions: widget.quiz,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 4),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(18),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [
+                              Color(0xFF6A4EFF),
+                              Color(0xFF9B7BFF),
+                            ],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color.fromARGB(255, 9, 0, 0).withOpacity(0.08),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: ListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
+                          title: Text(
+                            'Quiz Dasar',
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          subtitle: Text(
+                            'Latihan soal sesuai materi pada kursus ini',
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: Colors.white.withOpacity(0.9),
+                            ),
+                          ),
+                          trailing: Container(
+                            width: 40,
+                            height: 40,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: const Icon(
+                              Icons.quiz_outlined,
+                              color: Color(0xFF6A4EFF),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+// ================== YOUTUBE PLAYER WIDGET ==================
 
 class YoutubePlayerWidget extends StatefulWidget {
   final String url;
@@ -358,22 +660,38 @@ class _YoutubePlayerWidgetState extends State<YoutubePlayerWidget> {
 
   @override
   void initState() {
-    final videoId = YoutubePlayer.convertUrlToId(widget.url) ?? '';
-    _controller = YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: const YoutubePlayerFlags(autoPlay: false, mute: false),
-    );
     super.initState();
+    final id = YoutubePlayer.convertUrlToId(widget.url) ?? '';
+    _controller = YoutubePlayerController(
+      initialVideoId: id,
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant YoutubePlayerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      final newId = YoutubePlayer.convertUrlToId(widget.url) ?? '';
+      _controller.load(newId);
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: YoutubePlayer(
-        controller: _controller,
-        showVideoProgressIndicator: true,
-      ),
+    return YoutubePlayer(
+      controller: _controller,
+      showVideoProgressIndicator: true,
     );
   }
 }
+

@@ -1,3 +1,4 @@
+// imports (tambahkan provider import jika perlu)
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,23 +14,20 @@ import 'package:movato/src/core/theme/app_text_styles.dart';
 import 'package:movato/src/core/theme/app_colors.dart';
 import 'package:movato/src/core/constants/gaps.dart';
 import 'package:movato/src/core/utils/validators.dart';
-import 'package:movato/features/auth/services/auth_service.dart';
 import 'package:movato/features/auth/state/auth_notifier.dart';
 import 'package:movato/features/auth/state/auth_state.dart';
-
-// ✅ TAMBAH INI: import OnboardingPage
+import 'package:movato/src/di/providers.dart';
 import 'onboarding/onboarding_page.dart'; 
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final _emailC = TextEditingController();
   final _passC = TextEditingController();
-  final _auth = AuthService();
 
   bool _busy = false;
   bool _googleBusy = false; // (masih belum kepakai, tapi biarin dulu)
@@ -59,7 +57,9 @@ class _LoginPageState extends State<LoginPage> {
 
     setState(() => _busy = true);
     try {
-      await _auth.login(
+      // ambil authService dari provider
+      final authService = ref.read(authServiceProvider);
+      await authService.login(
         email: _emailC.text.trim(),
         password: _passC.text.trim(),
       );

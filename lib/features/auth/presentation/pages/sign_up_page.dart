@@ -1,5 +1,7 @@
+// imports...
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movato/features/auth/presentation/pages/login_page.dart';
 import 'package:movato/src/core/constants/gaps.dart';
 import 'package:movato/src/core/constants/insets.dart';
@@ -10,16 +12,16 @@ import 'package:movato/src/core/widgets/app_button.dart';
 import 'package:movato/src/core/widgets/app_text_field.dart';
 import 'package:movato/src/core/widgets/labeled_field.dart';
 import 'package:movato/src/core/widgets/password_field.dart';
-import 'package:movato/features/auth/services/auth_service.dart';
+import 'package:movato/src/di/providers.dart';
 
-class SignUpPage extends StatefulWidget {
+class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  ConsumerState<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
 
   final _emailC = TextEditingController();
@@ -27,8 +29,6 @@ class _SignUpPageState extends State<SignUpPage> {
   final _passwordC = TextEditingController();
   final _confirmPasswordC = TextEditingController();
   final _fullNameC = TextEditingController();
-
-  final _authService = AuthService();
 
   String? _selectedEducation;
   bool _busy = false;
@@ -71,7 +71,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
     setState(() => _busy = true);
     try {
-      await _authService.signup(
+      final authService = ref.read(authServiceProvider);
+      await authService.signup(
         email: _emailC.text.trim(),
         username: _usernameC.text.trim(),
         password: _passwordC.text.trim(),

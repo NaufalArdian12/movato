@@ -23,7 +23,24 @@ class VideoPlayerPage extends StatefulWidget {
 
 class _VideoPlayerPageState extends State<VideoPlayerPage> {
   late int _currentIndex;
-  late YoutubePlayerController _ytController;
+  YoutubePlayerController? _ytController;
+
+  String extractYoutubeId(String url) {
+    // Bersihkan URL YouTube dari parameter tambahan
+    if (url.contains("&")) {
+      url = url.split("&")[0];
+    }
+
+    // Ambil ID menggunakan converter bawaan
+    final id = YoutubePlayer.convertUrlToId(url);
+
+    if (id == null || id.isEmpty) {
+      debugPrint("❌ Invalid YouTube URL: $url");
+      return '';
+    }
+
+    return id;
+  }
 
   @override
   void initState() {
@@ -33,25 +50,23 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
   }
 
   void _initControllerWith(String url) {
-    final id = YoutubePlayer.convertUrlToId(url) ?? '';
+    final id = extractYoutubeId(url);
+
     _ytController = YoutubePlayerController(
-      initialVideoId: id,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
+      initialVideoId: id.isEmpty ? "dQw4w9WgXcQ" : id, // fallback ID aman
+      flags: const YoutubePlayerFlags(autoPlay: true, mute: false),
     );
   }
 
   void _loadVideo(String url) {
-    final newId = YoutubePlayer.convertUrlToId(url) ?? '';
+    final newId = extractYoutubeId(url);
+
+    if (_ytController == null) return;
+
     if (newId.isNotEmpty) {
-      _ytController.load(newId);
+      _ytController!.load(newId);
     } else {
-      // fallback: recreate controller if id couldn't be extracted
-      _ytController.dispose();
-      _initControllerWith(url);
-      setState(() {}); // rebuild
+      debugPrint("⚠ Invalid ID — keeping current controller alive");
     }
   }
 
@@ -67,7 +82,7 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
 
   @override
   void dispose() {
-    _ytController.dispose();
+    _ytController?.dispose();
     super.dispose();
   }
 
@@ -89,10 +104,12 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
         children: [
           AspectRatio(
             aspectRatio: 16 / 9,
-            child: YoutubePlayer(
-              controller: _ytController,
-              showVideoProgressIndicator: true,
-            ),
+            child: _ytController == null
+                ? const Center(child: CircularProgressIndicator())
+                : YoutubePlayer(
+                    controller: _ytController!,
+                    showVideoProgressIndicator: true,
+                  ),
           ),
 
           Expanded(
@@ -116,7 +133,10 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                   const SizedBox(height: 8),
                   Text(
                     lesson['desc'] ?? '',
-                    style: GoogleFonts.poppins(fontSize: 13, color: Colors.grey[800]),
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      color: Colors.grey[800],
+                    ),
                   ),
                   const SizedBox(height: 20),
 
@@ -130,13 +150,16 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         setState(() {
                           _currentIndex = index;
                         });
-                        final url = widget.lessons[_currentIndex]['video'] ?? '';
+                        final url =
+                            widget.lessons[_currentIndex]['video'] ?? '';
                         _loadVideo(url);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         decoration: BoxDecoration(
-                          color: isActive ? const Color(0xFFE6DEFF) : Colors.white,
+                          color: isActive
+                              ? const Color(0xFFE6DEFF)
+                              : Colors.white,
                           borderRadius: BorderRadius.circular(18),
                           boxShadow: [
                             BoxShadow(
@@ -147,25 +170,40 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           ],
                         ),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 10,
+                          ),
                           title: Text(
                             item['title'] ?? '',
-                            style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
                           ),
                           subtitle: Text(
                             item['desc'] ?? '',
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey[700]),
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: Colors.grey[700],
+                            ),
                           ),
                           trailing: Container(
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: isActive ? const Color(0xFF6A4EFF) : const Color(0xFF7B61FF),
+                              color: isActive
+                                  ? const Color(0xFF6A4EFF)
+                                  : const Color(0xFF7B61FF),
                             ),
-                            child: const Icon(Icons.play_arrow_rounded, color: Colors.white),
+                            child: const Icon(
+                              Icons.play_arrow_rounded,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -189,10 +227,11 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                         margin: const EdgeInsets.only(top: 4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(18),
-                          gradient: const LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [
-                            Color(0xFF6A4EFF),
-                            Color(0xFF9B7BFF),
-                          ]),
+                          gradient: const LinearGradient(
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                            colors: [Color(0xFF6A4EFF), Color(0xFF9B7BFF)],
+                          ),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.08),
@@ -202,20 +241,36 @@ class _VideoPlayerPageState extends State<VideoPlayerPage> {
                           ],
                         ),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           title: Text(
                             'Quiz Dasar',
-                            style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
+                            style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
                           ),
                           subtitle: Text(
                             'Latihan soal sesuai materi pada topik ini',
-                            style: GoogleFonts.poppins(fontSize: 11, color: Colors.white.withOpacity(0.9)),
+                            style: GoogleFonts.poppins(
+                              fontSize: 11,
+                              color: Colors.white.withOpacity(0.9),
+                            ),
                           ),
                           trailing: Container(
                             width: 40,
                             height: 40,
-                            decoration: const BoxDecoration(shape: BoxShape.circle, color: Colors.white),
-                            child: const Icon(Icons.quiz_outlined, color: Color(0xFF6A4EFF)),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                            ),
+                            child: const Icon(
+                              Icons.quiz_outlined,
+                              color: Color(0xFF6A4EFF),
+                            ),
                           ),
                         ),
                       ),

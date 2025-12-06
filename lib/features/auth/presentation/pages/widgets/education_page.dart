@@ -56,7 +56,7 @@ class EducationPage extends StatelessWidget {
             height: 50,
             child: ElevatedButton(
               onPressed: () {
-                controller.finishOnboarding(context); // ⬅️ ini
+                controller.finishOnboarding(context);
               },
               child: const Text("Continue"),
             ),

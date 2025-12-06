@@ -11,7 +11,6 @@ class ProgressPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // TOP HEADER
             Container(
               width: double.infinity,
               height: 320,
@@ -73,7 +72,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // THREE STATS
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Row(
@@ -103,7 +101,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            // DESCRIPTION
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Text(
@@ -118,7 +115,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 25),
 
-            // TITLE "Quizzes"
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Row(
@@ -146,7 +142,6 @@ class ProgressPage extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            // Quiz List
             quizItem("Quiz Dasar Pecahan", "11 mins 16 sec"),
             const SizedBox(height: 15),
 
@@ -161,7 +156,6 @@ class ProgressPage extends StatelessWidget {
     );
   }
 
-  // QUIZ CARD
   Widget quizItem(String title, String duration) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -205,7 +199,6 @@ class ProgressPage extends StatelessWidget {
               ),
             ),
 
-            // CHECK ICON DI KANAN
             const Icon(
               Icons.check_circle_rounded,
               color: Color(0xFF8E2DE2),
@@ -228,13 +221,12 @@ class ProgressPage extends StatelessWidget {
       height: 100,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.18), // background lembut tapi tetap terlihat
+        color: color.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ICON
           Icon(icon, color: color, size: 22),
 
           const Spacer(),
@@ -248,7 +240,6 @@ class ProgressPage extends StatelessWidget {
             ),
           ),
 
-          // LABEL
           Text(
             label,
             style: GoogleFonts.poppins(

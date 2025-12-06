@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:movato/features/auth/presentation/progress/progress_page.dart';
 
-import 'package:movato/features/course/course_page.dart';
 import 'package:movato/features/profile/profile_page.dart';
+import 'package:movato/features/topic/topics_page.dart';
 import 'package:movato/src/core/widgets/course_card.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -55,7 +55,7 @@ class _DashboardPageState extends State<DashboardPage> {
       case 0:
         return _buildHomePage();
       case 1:
-        return const CoursePage();
+        return const TopicsPage();
       case 2:
         return const ProgressPage();
       case 3:
@@ -262,7 +262,7 @@ class _DashboardPageState extends State<DashboardPage> {
       onLearnMore: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (_) => const CoursePage()),
+          MaterialPageRoute(builder: (_) => const TopicsPage()),
         );
       },
     );

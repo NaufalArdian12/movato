@@ -4,10 +4,9 @@ import 'package:movato/security/token_storage.dart';
 
 class AuthInterceptor extends Interceptor {
   final TokenStorage storage;
-  final Dio authless; // dio tanpa interceptor (dipakai untuk refresh)
+  final Dio authless;
   bool _refreshing = false;
 
-  // queue of requests waiting for refresh: store completer and original RequestOptions
   final List<_QueuedRequest> _queue = [];
 
   AuthInterceptor(this.storage, this.authless);
@@ -20,7 +19,6 @@ class AuthInterceptor extends Interceptor {
         options.headers['Authorization'] = 'Bearer $token';
       }
     } catch (_) {
-      // ignore storage errors, request tetap dilanjutkan
     }
     handler.next(options);
   }
@@ -44,7 +42,6 @@ class AuthInterceptor extends Interceptor {
       return;
     }
 
-    // Jika sedang refresh, queue request dan return (akan diselesaikan nanti)
     if (_refreshing) {
       final completer = Completer<Response>();
       _queue.add(_QueuedRequest(reqOptions, completer));
@@ -78,19 +75,15 @@ class AuthInterceptor extends Interceptor {
         return;
       }
 
-      // simpan token baru
       await storage.save(newAccess, newRefresh);
 
-      // retry original request with new access token
       final opts = reqOptions;
       opts.headers['Authorization'] = 'Bearer $newAccess';
 
-      // buat request ulang menggunakan dio tanpa interceptor untuk menghindari loop
       final retried = await authless.fetch(opts);
-      // selesaikan request yang memicu onError
+
       handler.resolve(retried);
 
-      // selesaikan semua request yang queued: retry each and complete their completer
       for (final queued in _queue) {
         try {
           queued.requestOptions.headers['Authorization'] = 'Bearer $newAccess';
@@ -102,7 +95,6 @@ class AuthInterceptor extends Interceptor {
       }
       _queue.clear();
     } catch (e) {
-      // refresh gagal: clear storage, reject queued requests
       await storage.clear();
       _failQueued(err);
       handler.next(err);

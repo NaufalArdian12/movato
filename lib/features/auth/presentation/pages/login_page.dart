@@ -1,4 +1,3 @@
-// imports (tambahkan provider import jika perlu)
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +16,7 @@ import 'package:movato/src/core/utils/validators.dart';
 import 'package:movato/features/auth/state/auth_notifier.dart';
 import 'package:movato/features/auth/state/auth_state.dart';
 import 'package:movato/src/di/providers.dart';
-import 'onboarding/onboarding_page.dart'; 
+import 'onboarding/onboarding_page.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -30,7 +29,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   final _passC = TextEditingController();
 
   bool _busy = false;
-  bool _googleBusy = false; // (masih belum kepakai, tapi biarin dulu)
+  bool _googleBusy = false;
   String? _emailError;
   String? _passError;
 
@@ -57,7 +56,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     setState(() => _busy = true);
     try {
-      // ambil authService dari provider
       final authService = ref.read(authServiceProvider);
       await authService.login(
         email: _emailC.text.trim(),
@@ -67,12 +65,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
       messenger.showSnackBar(const SnackBar(content: Text('Login success')));
 
-      // 🔥 DI SINI DIGANTI:
-      // DULU: langsung ke DashboardPage
-      // navigator.pushReplacement(
-      //   MaterialPageRoute(builder: (_) => const DashboardPage()),
-      // );
-      // SEKARANG: ke OnboardingPage dulu
       navigator.pushReplacement(
         MaterialPageRoute(builder: (_) => OnboardingPage()),
       );
@@ -162,12 +154,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     const SnackBar(content: Text('Login with Google success')),
                   );
 
-                  // 🔥 DI SINI JUGA DIGANTI:
-                  // DULU: langsung ke DashboardPage
-                  // navigator.pushReplacement(
-                  //   MaterialPageRoute(builder: (_) => const DashboardPage()),
-                  // );
-                  // SEKARANG: ke OnboardingPage dulu
                   navigator.pushReplacement(
                     MaterialPageRoute(builder: (_) => OnboardingPage()),
                   );

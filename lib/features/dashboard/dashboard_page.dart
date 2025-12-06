@@ -43,6 +43,8 @@ class _DashboardPageState extends State<DashboardPage> {
     ),
   ];
 
+  final List<_ClassItem> _completedClasses = [];
+
   String _greeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) return 'Good Morning';
@@ -125,14 +127,25 @@ class _DashboardPageState extends State<DashboardPage> {
 
         const SizedBox(height: 12),
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: _classes.length,
-            itemBuilder: (context, index) {
-              final item = _classes[index];
-              return _buildClassCard(item);
-            },
-          ),
+          child: _selectedTab == 0
+              ? ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: _classes.length,
+                  itemBuilder: (context, index) {
+                    final item = _classes[index];
+                    return _buildClassCard(item);
+                  },
+                )
+              : const Center(
+                  child: Text(
+                    'There is no course is Completed',
+                    style: TextStyle(
+                      color: Colors.grey,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
         ),
       ],
     );

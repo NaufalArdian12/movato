@@ -36,7 +36,7 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
   }
 
   Future<void> _init() async {
-    // ambil service dari provider
+    
     _service = ref.read(userServiceProvider);
     await _loadUser();
   }
@@ -61,10 +61,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
         _emailCtrl.text = u.email;
         _fullNameCtrl.text = u.name;
 
-        // Tidak ada username di model → generate
         _usernameCtrl.text = u.name.replaceAll(" ", "").toLowerCase();
 
-        // Tidak ada education di model → placeholder
         _educationCtrl.text = "Elementary School Grade 1";
       });
     } catch (e) {

@@ -15,7 +15,7 @@ class MovatoApp extends StatelessWidget {
     return const MaterialApp(
       title: 'Movato',
       debugShowCheckedModeBanner: false,
-      home: AuthGate(), // ⬅️ balik ke sini
+      home: AuthGate(),
     );
   }
 }

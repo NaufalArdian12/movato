@@ -73,13 +73,12 @@ class AuthRepository {
     if (access != null && refresh != null) {
       await _storage.save(access, refresh);
     } else if (access != null) {
-      // jika hanya access ada, simpan refresh sebagai empty string (opsional)
+      
       await _storage.save(access, refresh ?? '');
     } else {
       debugPrint("No tokens found in exchange response.");
     }
 
-    // Pastikan resolvedUserJson adalah Map<String, dynamic>
     final userMap = (resolvedUserJson is Map)
         ? Map<String, dynamic>.from(resolvedUserJson)
         : null;

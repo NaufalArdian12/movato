@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:movato/features/auth/data/auth_repository.dart';
 import 'package:movato/features/auth/services/auth_service.dart';
+import 'package:movato/features/topic/models/topic.dart';
+import 'package:movato/features/topic/topic_service.dart';
 import 'package:movato/features/user/user_service.dart';
 import 'package:movato/security/token_storage.dart';
 import 'package:movato/src/core/network/dio_builder.dart';
@@ -36,4 +38,19 @@ final authRepoProvider = Provider<AuthRepository>((ref) {
     ref.watch(dioProvider),
     ref.watch(tokenStorageProvider),
   );
+});
+
+final topicServiceProvider = Provider<TopicService>((ref) {
+  final dio = ref.watch(dioProvider);
+  return TopicService(dio);
+});
+
+final topicsListProvider = FutureProvider.family<List<Topic>, int?>((ref, gradeLevelId) async {
+  final service = ref.watch(topicServiceProvider);
+  return service.getTopics(gradeLevelId: gradeLevelId);
+});
+
+final topicDetailProvider = FutureProvider.family<Topic, int>((ref, id) async {
+  final service = ref.watch(topicServiceProvider);
+  return service.getTopic(id);
 });

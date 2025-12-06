@@ -1,4 +1,3 @@
-// lib/features/auth/data/auth_service.dart
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:package_info_plus/package_info_plus.dart';
